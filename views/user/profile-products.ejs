@@ -1,0 +1,275 @@
+<%- include('../partials/user-header') %>
+<section class="mt-70 mb-60">
+  <div class="container">
+    <div class="row order-wrap mx-auto">
+      <div class="text-end mb-60">
+        <a href="/my-orders" class="btn btn-outline btn-lg btn-brand-outline font-weight-bold text-brand bg-white text-hover-white border-radius-5 btn-shadow-brand hover-up">Back to all orders</a>
+        <a href="#" onclick="invoice('<%=orders.length %>','<%=orders[0].address%>','<%=orders[0]._id %>')" class="btn ms-2">Download invoice</a>
+      </div>
+
+   
+
+
+    </div>
+    <div class="row order-wrap mx-auto d-flex justify-content-center">
+      <div class="col-4 pe-3">
+        <h4 class="mb-35 text-brand text-center">Delivery Address</h4>
+        <div class="table-responsive">
+          <table class="table shopping-summery">
+            <tbody>
+              <tr>
+                <td>Name:</td>
+                <td><b><%=orders[0].name%> </b></td>
+              </tr>
+              <tr>
+                <td>Phone:</td>
+                <td><b><%=orders[0].phone%> </b></td>
+              </tr>
+              <tr>
+                <td>Address:</td>
+                <td><%=orders[0].address%></td>
+              </tr>
+              <tr>
+                <td>Pincode:</td>
+                <td><%=orders[0].pincode%></td>
+              </tr>
+              <tr>
+                <td>State:</td>
+                <td><%=orders[0].state%></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mt-50 mb-70">
+  <div class="container">
+    <div class="row order-wrap mx-auto">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table shopping-summery text-center">
+            <thead>
+              <tr class="main-heading">
+                <th scope="col">Image</th>
+                <th scope="col">Product</th>
+                <th scope="col">Unit price</th>
+                <th scope="col">Quantity</th>
+                <!-- <th scope="col">Price</th> -->
+                <th scope="col">Order Status</th>
+                <!-- <th scope="col">Payment Status</th> -->
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let i=0 %> <% orders.forEach(element => {%>
+
+              <tr class="">
+                <td class="image product-thumbnail">
+                  <a href="/profile-product-view?id=<%-orders[i].product %>">
+                    <img
+                      src="/product-images/<%-orders[i].product %>0.png"
+                      alt="#"
+                    />
+                  </a>
+                </td>
+                <td class="product-des product-name">
+                  <h5 class="product-name">
+                    <a href="" id="pName<%=i %>"><%=orders[i].cartProducts.name%> </a> <br />
+                    <i href=""><%=orders[i].cartProducts.description%> </i>
+                  </h5>
+                </td>
+                <td class="text-center" id="pPrice<%=i %>">
+                  <%=orders[i].cartProducts.price%>
+
+                  <!-- <span class="old-price"> 0</span> -->
+                </td>
+                <td class="text-center" id="pQ<%=i %>"><%=orders[i].quantity%></td>
+                <!-- <td class="price" data-title="Price"><span>0</span></td> -->
+                <td class="text-center" data-title="Stock">
+                  <span class="color3 font-weight-bold">
+                    <% if(orders[i].status=="cancelled"){ %>
+                    <span class="badge rounded-pill alert-danger"
+                      ><%=orders[i].status%></span
+                    >
+                    <% } else{ %>
+                    <span class="badge rounded-pill alert-success"
+                      ><%=orders[i].status%></span
+                    >
+                    <% } %>
+                  </span>
+                </td>
+
+                <!-- <td class="text-right" data-title="">0</td> -->
+                <% if(orders[i].status=="cancelled"){ %>
+                <td class="button-td">
+                  <h6 class="mb-35 text-brand text-center text-danger">
+                    Order Cancelled
+                  </h6>
+                </td>
+                <% } else if(orders[i].status=="Delivered"){ %>
+                <td class="button-td">
+                  <button
+                    id="cancelOrder"
+                    class="btn btn-sm btn-secondary"
+                    onclick="returnProduct('<%-orders[i].product %>','<%=orders[i]._id %> ')"
+                  >
+                    <i class="fi-rs-shopping-bag mr-5"></i>RETURN
+                  </button>
+                </td>
+
+                <% } else if(orders[i].status=="product returned"){ %>
+                <td class="button-td">
+                  <h6 class="mb-35 text-brand text-center text-success" id="returned">
+                    Return Accepted
+                  </h6>
+                </td>
+
+                <% } else{%>
+
+                <td class="button-td">
+                  <button
+                    id="cancelOrder"
+                    class="btn btn-sm btn-secondary"
+                    onclick="cancelOrder('<%-orders[i].product %>','<%=orders[i]._id %> ')"
+                  >
+                    <i class="fi-rs-shopping-bag mr-5"></i>Cancel order
+                  </button>
+                </td>
+
+                <% } %>
+              </tr>
+              <%i++ }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function cancelOrder(proId, orderId) {
+    console.log(proId);
+    $.ajax({
+      url: "/cancel-order?id=" + proId,
+      method: "post",
+      data: {
+        proId,
+        orderId,
+      },
+      success: (response) => {
+        console.log(response);
+        location.reload();
+      },
+    });
+  }
+  function returnProduct(proId, orderId) {
+    console.log(proId, orderId);
+    $.ajax({
+      url: "/return-product",
+      method: "post",
+      data: {
+        proId,
+        orderId,
+      },
+      success: (response) => {
+        if (response.statusChanged) {
+          location.reload()
+        }
+      },
+    });
+  }
+
+
+  function invoice(length,address,orderNo) {
+   
+  
+            var date = new Date().toDateString().slice(3)
+           console.log(length)
+            console.log(address)
+              console.log(orderNo)
+            var productArray = []
+            for (var i = 0; i < length; i++) {
+
+              
+                var productName = document.getElementById("pName"+i).innerText;
+                 console.log(productName)
+                var productPrice = document.getElementById("pPrice"+i).innerText;
+                console.log(productPrice)
+                var productQuantity = document.getElementById("pQ"+i).innerText;
+                console.log(productQuantity)
+
+                var product = {
+                    "quantity": productQuantity,
+                    "description": productName,
+                    "tax-rate": 6,
+                    "price": productPrice
+                }
+                productArray.push(product)
+
+            }
+            console.log(productArray)
+
+            var data = {
+
+                "customize": {
+
+                },
+                "images": {
+
+                    "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
+                },
+
+                "sender": {
+                    "company": "Evara inc.",
+                    "address": "Sample Street 123",
+                    "zip": "682004",
+                    "city": "Ernakulam",
+                    "country": "India"
+
+                },
+
+                "client": {
+                    "company": "",
+                    "address": address,
+                    // "zip": "",
+                    // "city": "",
+                    "country": "India"
+
+                },
+                "information": {
+                    // Invoice number
+                    "number": orderNo,
+                    // Invoice data
+                    "date": date,
+                    "due-date": "NA"
+                },
+
+                "products": productArray,
+
+
+                "bottom-notice": "Thank You for choosing our store",
+
+                "settings": {
+                    "currency": "INR",
+
+                },
+
+                "translate": {
+
+                },
+            };
+
+
+            easyinvoice.createInvoice(data, function (result) {
+
+                easyinvoice.download("invoice2.pdf")
+            });
+
+        }
+
+</script>
+
+<%- include('../partials/user-footer') %>

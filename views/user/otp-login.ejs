@@ -1,0 +1,192 @@
+ 
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Evara Shopping</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="assets/imgs/theme/favicon.svg"
+    />
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="/custom/custom.css" />
+  </head>
+
+  <body>
+    <main class="main">
+      <div class="page-header breadcrumb-wrap">
+          <div class="container">
+              <div class="breadcrumb">
+                  <a href="/">Home</a>
+                  <span></span> Login with OTP
+              </div>
+          </div>
+      </div>
+      <section class="pt-150 pb-150">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-10 m-auto">
+                      <div class="row">
+                          <div class="col-lg-5 mx-auto">
+                              <div
+                                  class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                  <div class="padding_eight_all bg-white">
+                                      <div class="heading_s1">
+                                          <h3 class="mb-30">Login</h3>
+                                      </div>
+                                      <form action="">
+                                          <div class="form-group mb-4">
+  
+                                              <input id="phonenumber" type="number" value="" name="phonenumber"
+                                                  placeholder="Mobile number" requiredF>
+                                              <p id="send" style='color: rgb(53,200,0);'></p>
+                                              <p id="error" style='color: rgb(300,0,0)'></p>
+  
+                                              <span id="phonenumbers" class="mt-2 text-danger"
+                                                  style="font-size: 13px"></span>
+  
+                                          </div>
+                                          <div class="form-group">
+                                              <button type="button" class="btn btn-fill-out btn-block hover-up me-2"
+                                                  name="login" onclick="sendOtp()">Get OTP</button>
+  
+                                              <a href="/login"
+                                                  class="btn btn-outline btn-lg btn-brand-outline font-weight-bold text-brand bg-white text-hover-white ml-15 border-radius-5 btn-shadow-brand hover-up"
+                                                  name="login">Login with password</a>
+                                          </div>
+  
+                                          <div class="heading_s1">
+  
+  
+                                              <p class="mb-20 font-sm mt-3">Please enter the OTP to login.</p>
+  
+                                          </div>
+  
+  
+                                          <div class="form-group mb-4">
+                                              <input type="number" id="verify" name="otp" placeholder="OTP" required>
+                                              <div class="d-flex justify-content-between">
+                                                  <p id="confirm" style='color: rgb(300,0,0)'></p>
+                                                  <a class="d-flex justify-content-end" id="resendOtp" onclick="sendOtp()"
+                                                      style="display: none !important;">Resend otp</a>
+                                              </div>
+                                          </div>
+                                          <div class="form-group">
+                                              <button type="button" class="btn btn-fill-out btn-block hover-up me-2"
+                                                  name="login" onclick="verifyOtp()">Login</button>
+                                              <a href="/"
+                                                  class="btn btn-outline btn-lg btn-brand-outline font-weight-bold text-brand bg-white text-hover-white ml-15 border-radius-5 btn-shadow-brand hover-up"
+                                                  name="login">Cancel</a>
+                                          </div>
+  
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+  </main>
+  <script>
+
+    function sendOtp() {
+        let phone = document.getElementById('phonenumber');
+        let phoneval = phone.value.trim();
+        let error3 = document.getElementById('error');
+
+        error3.innerText=""
+           
+        phone.addEventListener("keyup", () => {
+               error3.innerText = ""
+            })
+
+        if (phoneval == "") {
+            error3.innerText = 'This field is required'
+        } else if (!phoneval.match(/^(\+\d{1,3}[- ]?)?\d{10}$/) && !(phoneval.match(/0{5,}/))) {
+            error3.innerText = "Enter a valid mobile number"
+        } else {
+            
+            sumbit();
+        }
+
+        
+        function sumbit() {
+            let sendOtp = document.getElementById('send').innerText = 'Otp send'
+            let num = document.getElementById('phonenumber').value.trim()
+            fetch('/otp_login?phoneNumber=91' + num + '&channel=sms', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        }
+    }
+
+    function verifyOtp() {
+        const number = document.getElementById('phonenumber').value.trim()
+        const verify = document.getElementById('verify').value.trim()
+        fetch('/otp_verify?phoneNumber=91' + number + '&code=' + verify, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => res.json())
+            .then((res) => {
+                if (res.value == "success") {
+                    window.location.href = '/'
+                }
+                 else {
+                    document.getElementById('confirm').innerText = 'Otp not valid'
+                }
+            })
+    }
+
+
+</script>
+
+<script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+<script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+<script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+<script src="assets/js/plugins/slick.js"></script>
+<script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+<script src="assets/js/plugins/wow.js"></script>
+<script src="assets/js/plugins/jquery-ui.js"></script>
+<script src="assets/js/plugins/perfect-scrollbar.js"></script>
+<script src="assets/js/plugins/magnific-popup.js"></script>
+<script src="assets/js/plugins/select2.min.js"></script>
+<script src="assets/js/plugins/waypoints.js"></script>
+<script src="assets/js/plugins/counterup.js"></script>
+<script src="assets/js/plugins/jquery.countdown.min.js"></script>
+<script src="assets/js/plugins/images-loaded.js"></script>
+<script src="assets/js/plugins/isotope.js"></script>
+<script src="assets/js/plugins/scrollup.js"></script>
+<script src="assets/js/plugins/jquery.vticker-min.js"></script>
+<script src="assets/js/plugins/jquery.theia.sticky.js"></script>
+<script src="assets/js/plugins/jquery.elevatezoom.js"></script>
+<!-- Template  JS -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/shop.js"></script>
+
+<!-- custom scripts -->
+<script src="assets/js/sweetalert2.js"></script>
+
+<script src="/custom/validation.js"></script>
+<script src="/custom/custom.js"></script>
+
+
+</body>
+
+</html>

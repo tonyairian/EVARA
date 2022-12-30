@@ -1,0 +1,77 @@
+<%- include('../partials/admin-header') %>
+
+<section class="content-main">
+  <div class="content-header">
+    <div class="col-6">
+      <h2 class="content-title card-title">Sales report</h2>
+      <p>Date:</p>
+    </div>
+    <div class="col-6 text-end">
+      <a href="/admin/sales-report/new" class="btn btn-primary btn-md rounded"
+        ><i class="text-muted material-icons md-post_add"></i> More reports</a
+      >
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="table-responsive">
+            <table class="table" id="reportTable1">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>ID</th>
+                  <th>Products</th>
+                  <th>Payment option</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>i</td>
+                  <td>id</td>
+                  <td>length</td>
+                  <td>paymentOption</td>
+                  <td>₹cartTotal</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="no-sort">
+                  <td>
+                    <h6>Total</h6>
+                  </td>
+                  <td></td>
+                  <td>
+                    <h6>total products</h6>
+                  </td>
+                  <td></td>
+                  <td><b class="h5">₹totalrevenue</b></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <!-- table-responsive// -->
+
+          <h4 class="mx-auto my-4 py-4 text-center">
+            No sales during this period!
+          </h4>
+        </div>
+        <!-- col// -->
+      </div>
+    </div>
+    <!-- card-body end// -->
+  </div>
+  <!-- card end// -->
+</section>
+<!-- content-main end// -->
+
+<%- include('../partials/admin-footer') %>
+
+<script>
+  $(window).on("load", function () {
+    $(".dt-button").addClass("btn btn-light rounded font-md");
+    $(".dt-button").removeClass("dt-button buttons-csv buttons-html5");
+  });
+</script>

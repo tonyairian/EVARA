@@ -1,0 +1,142 @@
+<%- include('../partials/user-header') %>
+
+<section
+  class="product-tabs section-padding position-relative wow fadeIn animated"
+>
+  <div class="bg-square"></div>
+  <div class="container">
+    <!--End nav-tabs-->
+    <div class="row product-grid-4">
+      <%products.forEach(product => {%>
+      <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+        <div class="product-cart-wrap mb-30">
+          <div class="product-img-action-wrap">
+            <div class="product-img product-img-zoom">
+              <a href="/product?id=<%-product._id %>">
+                <img
+                  class="default-img"
+                  src="/product-images/<%-product._id %>0.png "
+                  alt=""
+                />
+                <img
+                  class="hover-img"
+                  src="/product-images/<%-product._id %>0.png "
+                  alt=""
+                />
+              </a>
+            </div>
+            <div class="product-action-1">
+              <a
+                aria-label="Add To Wishlist"
+                class="action-btn hover-up"
+                id="wishlistStatus"
+                onclick="addToWishlist('<%=product._id  %>')"
+                ><i class="fi-rs-heart"></i
+              ></a>
+            </div>
+            <div
+              class="product-badges product-badges-position product-badges-mrg"
+            >
+              <span class="hot">Hot</span>
+            </div>
+          </div>
+          <div class="product-content-wrap">
+            <div class="product-category">
+              <a href="shop-grid-right.html"><%-product.category %></a>
+            </div>
+            <h2>
+              <a href="shop-product-right.html"><%-product.name %> </a>
+            </h2>
+            <div class="rating-result" >
+              <span>
+                <% if (product.discountPercentage==0) {%> 
+                  <span>No offer</span>
+                  <% } else {%> 
+                    <span><%=product.discountPercentage%>%</span>
+                    <% } %> 
+                  
+              </span>
+            </div>
+          
+            
+            <div class="product-price">
+              <% if(product.categoryDiscount) { %> 
+              <p><s>₹<%=product.originalPrice %></s></p>
+              <% } %>  
+              <div>
+                <span>₹<%=product.price %></span>
+              </div>
+            </div>
+            <div class="product-action-1 show">
+              <a
+                aria-label="Add To Cart"
+                class="action-btn hover-up"
+                onclick="addToCart('<%=product._id %>')"
+                ><i class="fi-rs-shopping-bag-add"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% }); %>
+    </div>
+    <!--End tab-content-->
+  </div>
+</section>
+
+<script>
+  function addToCart(proId) {
+    $.ajax({
+      url: "/add-to-cart?id=" + proId,
+      method: "get",
+      success: (response) => {
+        if (response.loggedIn == false) {
+          window.location.href = "/login";
+          return true;
+        }
+        Swal.fire({
+          position: "",
+          icon: "success",
+          title: "Product added to cart",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        if (response.status) {
+          let cartCount = $("#cartCount").html();
+          cartCount = parseInt(cartCount) + 1;
+          $("#cartCount").html(cartCount);
+        }
+        // alert(response)
+      },
+    });
+  }
+
+  function addToWishlist(proId) {
+    $.ajax({
+      url: "/add-to-wishlist?id=" + proId,
+      method: "get",
+      success: (response) => {
+        console.log(response);
+        if (response.loggedIn == false) {
+          window.location.href = "/login";
+          return true;
+        }
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Product added to Wishlist",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        if (response.status == "added") {
+          const a = document.getElementById("wishlistStatus");
+          let wishlistCount = $("#wishlistCount").html();
+          wishlistCount = parseInt(wishlistCount) + 1;
+          $("#wishlistCount").html(wishlistCount);
+        }
+      },
+    });
+  }
+</script>
+<%- include('../partials/user-footer') %>

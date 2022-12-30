@@ -1,0 +1,158 @@
+<%- include('../partials/user-header') %>
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/" rel="nofollow">Home</a>
+        <span></span> Shop <span></span> Your Wishlist
+      </div>
+    </div>
+  </div>
+
+  <% if(wishlistCount==0){ %>
+  <div class="col-12 text-center my-5">
+    <h3 class="">Your Wishlist is empty!❤️</h3>
+    <p class="mb-4 mt-2">Add items to it now.</p>
+    <a class="btn" href="/"
+      ><i class="fi-rs-shopping-bag mr-10"></i>Return Home</a
+    >
+  </div>
+  <% } else{ %>
+  <section class="mt-50 mb-50">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table shopping-summery text-center">
+              <thead>
+                <tr class="main-heading">
+                  <th scope="col" colspan="2">Product</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Stock Status</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%userWishlist.forEach(product => {%>
+
+                <tr id="<%-product.item %>-tr">
+                  <td class="image product-thumbnail">
+                    <a href="/profile-product-view?id=<%-product.item %>">
+                      <img
+                        src="/product-images/<%-product.item %>0.png"
+                        
+                        alt="img"
+                      />
+                    </a>
+                  </td>
+                  <td class="product-des product-name">
+                    <h5 class="product-name">
+                      <a href="/profile-product-view?id=<%-product.item %>">
+                        <%=product.name %>
+                      </a>
+                    </h5>
+                    <a href="/product/unisex-black-phase-laptop-backpack"> </a>
+                  </td>
+                  <td class="price" data-title="Price">
+                    <span><%=product.price %> </span>
+                  </td>
+                  <td class="text-center" data-title="Stock">
+                    <% if (product.inStock==true) {%>
+                    <span class="color3 font-weight-bold">In Stock </span>
+                    <% } else {%> <% } %>
+                  </td>
+                  <td class="text-right" data-title="Cart">
+                    <button
+                      onclick="addTocart('<%=product.item %>')"
+                      class="btn btn-sm"
+                    >
+                      <i class="fi-rs-shopping-bag mr-5"></i>Add to cart
+                    </button>
+                  </td>
+                  <td class="action" data-title="Remove">
+                    <a
+                      class=""
+                      onclick="removeProductFromWishlist('<%=product.item %>')"
+                    >
+                      <i class="fi-rs-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                <%}); %>
+              </tbody>
+            </table>
+          </div>
+          <div class="cart-action text-center mt-4">
+            <!-- <a href="/checkout" class="btn me-2"><i class="fi-rs-shopping-bag mr-10"></i>Go to cart</a> -->
+            <a
+              href="/"
+              class="btn btn-outline btn-lg btn-brand-outline font-weight-bold text-brand bg-white text-hover-white border-radius-5 btn-shadow-brand hover-up"
+              ><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <% } %>
+</main>
+<script>
+  function addTocart(proId) {
+    $.ajax({
+      url: "/add-to-cart?id=" + proId,
+      method: "get",
+      success: (response) => {
+        if (response.status) {
+          let cartCount = $("#cartCount").html();
+          cartCount = parseInt(cartCount) + 1;
+          $("#cartCount").html(cartCount);
+        }
+        // alert(response)
+      },
+    });
+  }
+
+  function removeProductFromWishlist(proId) {
+    swal
+      .fire({
+        title: "Remove Product",
+        text: "Are you sure you want to remove product from wishlist?",
+        type: "warning",
+        inputType: "submit",
+        showCancelButton: true,
+        closeOnConfirm: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "/remove-p-wishlist?id=" + proId,
+            method: "post",
+            success: (response) => {
+              if (response.wishlistCount === 1) {
+                window.location.reload();
+              } else {
+                if (response.productRemoved) {
+                  Swal.fire({
+                    title: "Removed",
+                    timer: 700,
+                    showConfirmButton: false,
+                  });
+                  const ProRow = document.getElementById(proId + "-tr");
+                  $(ProRow).remove();
+                  let wishlistCount = $("#wishlistCount").html();
+                  wishlistCount = parseInt(wishlistCount) - 1;
+                  $("#wishlistCount").html(wishlistCount);
+                }
+              }
+            },
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+</script>
+
+<%- include('../partials/user-footer') %>

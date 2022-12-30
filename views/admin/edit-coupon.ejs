@@ -1,0 +1,55 @@
+<%- include('../partials/admin-header') %>
+<section class="content-main">
+  <div class="col-8 mx-auto">
+    <div class="content-header">
+      <div class="col-6">
+        <h2 class="content-title card-title">Edit coupon</h2>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <form action="/admin/edit-coupon" method="POST">
+              <div class="mb-4">
+                <label for="product_name" class="form-label">Name</label>
+                <input required value="<%= couponData.couponCode %>" name="couponCode" type="text" placeholder="Type here" class="form-control" id="product_name" />
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="mb-4">
+                    <label for="cat_discount" class="form-label">Discount percentage</label>
+                    <input required value="<%= couponData.couponDiscount %>"   name="couponDiscount" type="number" placeholder="1%" class="form-control" id="cat_discount" max="100" />
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="mb-4">
+                    <label for="cat_discount" class="form-label">Max Discount</label>
+                    <input required value="<%= couponData.couponMaxDiscount %>" name="couponMaxDiscount" type="number" placeholder="500" class="form-control" id="cat_discount" />
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="mb-4">
+                    <label for="cat_discount" class="form-label">Min cart value</label>
+                    <input required value="<%= couponData.couponMinCartValue %>" name="couponMinCartValue" type="number" placeholder="2000" class="form-control" id="cat_discount" />
+                  </div>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label for="cat_discount" class="form-label">Expiry date</label>
+                <input required class="form-control mb-3" type="date" id="expiryDate" name="expiryDate" value="<%= couponData.expiryDate %>">
+              </div>
+              <div class="">
+                <input type="text" name="id" value="<%= couponData._id %>" hidden>
+                <button class="btn btn-primary">Publish</button>
+                <a href="/admin/coupons" class="btn btn-light rounded ">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div> <!-- .row // -->
+      </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+  </div>
+
+</section>
+<%- include('../partials/admin-footer') %>

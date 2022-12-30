@@ -1,0 +1,49 @@
+<%- include('../partials/admin-header') %>
+<div class="screen-overlay"></div>
+
+<section class="content-main">
+  <div class="content-header">
+      <div>
+          <h2 class="content-title card-title">Banners</h2>
+
+      </div>
+      <div>
+
+          <a href="/admin/add-banner" class="btn btn-primary btn-sm rounded">Add Banner</a>
+      </div>
+  </div>
+  <% banner.forEach(banner=>{ %>
+  <div class="row">
+      <div class="col-lg-12">
+          <div class="card card-product-grid">
+              <a href="#" class="img-wrap"> <img src="/add-banner/<%=banner._id %>.png" alt="Banner"> </a>
+              <div class="info-wrap">
+                  <div class="dropdown float-end">
+                      <a href="/admin/get-banner?id=<%=banner._id %>" class="btn btn-sm btn-brand rounded font-sm mt-15"
+                          >Edit</a
+                        >
+                        <a href="/admin/delete-banner?id=<%=banner._id %>" class="btn  btn-sm btn-danger  rounded font-sm mt-15 " onclick="return confirm('Are you sure you want to delete <%=banner.name %>?');"
+                           >Delete</a
+                        >
+
+                        
+                  </div>
+                  
+                  <a class="title text-center"><span>NAME: </span> <%=banner.name %> </a>
+                 
+                  <a class="title text-center"> <span>DESCRIPTION: </span>  <%=banner.description %> </a>
+                 
+              </div>
+          </div> <!-- card-product  end// -->
+      </div> <!-- col.// -->
+
+  </div> <!-- row.// -->
+  <% }) %>
+
+</section> <!-- content-main end// -->
+
+
+<script>
+
+</script>
+<%- include('../partials/admin-footer') %>

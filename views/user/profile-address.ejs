@@ -1,0 +1,368 @@
+<%- include('../partials/user-header') %>
+<section class="pt-100 pb-100">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 m-auto">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="dashboard-menu">
+              <ul class="nav flex-column" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link" href="/profile"
+                    ><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/my-orders"
+                    ><i class="fi-rs-shopping-bag mr-10"></i>Orders</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a href="/my-address" class="nav-link active"
+                    ><i class="fi-rs-marker mr-10"></i>My Address</a
+                  >
+                </li>
+                <!-- <li class="nav-item">
+                  <a class="nav-link" href="/my-account/edit"
+                    ><i class="fi-rs-user mr-10"></i>Account details</a
+                  >
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link" href="/logout"
+                    ><i class="fi-rs-sign-out mr-10"></i>Logout</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-8">
+            <div class="tab-content dashboard-content">
+              <div
+                class="tab-pane fade active show"
+                id="address"
+                role="tabpanel"
+                aria-labelledby="address-tab"
+              >
+                <div class="row">
+                  <% let i=0 %> <% userAddresses.forEach(user => {%>
+                  <div id="address-container" class="col-lg-6 mb-4">
+                    <div class="card mb-3 mb-lg-0">
+                      <div class="card-header">
+                        <h5 class="mb-0"><%=user.name+ " - " +user.phone %></h5>
+                      </div>
+                      <div class="card-body">
+                        <address class="mb-1">
+                          <%=user.address %> <br />
+                          <%=user.city %> <br />
+                          <%=user.pincode %> <br />
+                          <%=user.state %>
+                        </address>
+                        <a
+                          class="me-2"
+                          onclick="editAddress(
+                          
+                          '<%=userAddresses[i].addressId %>',
+                          '<%=user.name %>',
+                          '<%=user.address %>',
+                          '<%=user.city %>',
+                          '<%=user.state %>',
+                          '<%=user.pincode %>',
+                          '<%=user.phone %>',
+                          '<%=user.email %>',
+                          )"
+                          style="color: #088178"
+                          >Edit</a
+                        >
+
+                        <a
+                          onclick="deleteAddress('<%=userAddresses[i].addressId %>')"
+                          class="btn-small text-danger ms-2"
+                          >Delete</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <%i++ }); %>
+                </div>
+
+                <div class="row mx-1 mt-2">
+                  <div class="toggle_info">
+                    <span
+                      ><i class="fi-rs-user mr-10"></i>
+                      <a
+                        href="#newAddress"
+                        data-bs-toggle="collapse"
+                        class="collapsed"
+                        aria-expanded="false"
+                        >Add new address</a
+                      ></span
+                    >
+                  </div>
+                  <div
+                    class="panel-collapse collapse login_form"
+                    id="newAddress"
+                  >
+                    <div class="panel-body">
+                      <form
+                        method="post"
+                        id="checkout-form"
+                        action="/add-address"
+                      >
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            required=""
+                            name="name"
+                            id="name"
+                            placeholder="Full Name *"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required
+                            type="text"
+                            name="address"
+                            id="address"
+                            placeholder="Address *"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required
+                            type="text"
+                            name="city"
+                            id="city"
+                            placeholder="City / Town *"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required
+                            type="text"
+                            name="state"
+                            id="state"
+                            placeholder="State / County *"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <input
+                            required=""
+                            type="text"
+                            name="pincode"
+                            id="pinCode"
+                            placeholder="Postcode / PIN *"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required=""
+                            type="text"
+                            name="phone"
+                            id="phone"
+                            placeholder="Phone *"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required=""
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="Email address *"
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          class="btn btn-fill-out btn-block hover-up"
+                        >
+                          Add Address
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function deleteAddress(addressId) {
+    Swal.fire({
+      title: "Remove Address",
+      text: "Are you sure you want to remove this address?",
+      showCancelButton: true,
+      confirmButtonText: "Remove",
+      // iconHtml: null,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "/delete-address",
+          method: "post",
+          // id:"address-container"
+          data: {
+            addressId: addressId,
+          },
+          success: (response) => {
+            location.reload();
+          },
+        });
+      } else {
+        // Swal.fire({
+        //   // title: "",
+        //   // timer: 1500,
+        // });
+      }
+    });
+  }
+
+  function editAddress(
+    addressId,
+    name,
+    address,
+    city,
+    state,
+    pincode,
+    phone,
+    email
+  ) {
+    Swal.fire({
+      title: "Edit address",
+      showCancelButton: true,
+      html: `
+     
+     
+     <form
+                        method="post"
+                        id="checkout-form"
+                        action=""
+                      >
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            required=""
+                            name="name"
+                            id="name"
+                            placeholder="Full Name *"
+                            value="${name}"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required
+                            type="text"
+                            name="address"
+                            id="address"
+                            placeholder="Address *"
+                            value="${address}"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required
+                            type="text"
+                            name="city"
+                            id="city"
+                            placeholder="City / Town *"
+                            value="${city}"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required
+                            type="text"
+                            name="state"
+                            id="state"
+                            placeholder="State / County *"
+                            value="${state}"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <input
+                            required=""
+                            type="text"
+                            name="pincode"
+                            id="pinCode"
+                            placeholder="Pincode / PIN *"
+                            value="${pincode}"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required=""
+                            type="number"
+                            name="phone"
+                            id="phone"
+                            placeholder="Phone *"
+                            value="${phone}"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            required=""
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="Email address *"
+                            value="${email}"
+                          />
+                        </div>
+                       
+                      </form>
+          
+     `,
+
+      confirmButtonText: "Update address",
+      focusConfirm: false,
+      preConfirm: () => {
+        (name = Swal.getPopup().querySelector("#name").value),
+          (address = Swal.getPopup().querySelector("#address").value),
+          (city = Swal.getPopup().querySelector("#city").value),
+          (state = Swal.getPopup().querySelector("#state").value),
+          (pincode = Swal.getPopup().querySelector("#pinCode").value),
+          (phone = Swal.getPopup().querySelector("#phone").value),
+          (email = Swal.getPopup().querySelector("#email").value);
+        if (
+          !name ||
+          !address ||
+          !city ||
+          !state ||
+          !pincode ||
+          !phone ||
+          !email
+        ) {
+          Swal.showValidationMessage(`Please fill the required fields`);
+        }
+        return {
+          addressId,
+          name,
+          phone,
+          address,
+          state,
+          city,
+          pincode,
+          email,
+        };
+      },
+    }).then((result) => {
+      $.ajax({
+        url: "/edit-address?id=" + addressId,
+        method: "post",
+        data: result.value,
+        success: (response) => {
+          if (true) {
+            window.location.reload();
+          }
+        },
+      });
+    });
+  }
+</script>
+<%- include('../partials/user-footer') %>

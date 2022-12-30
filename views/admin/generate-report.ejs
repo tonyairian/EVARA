@@ -1,0 +1,298 @@
+<%- include('../partials/admin-header') %>
+
+<section class="content-main">
+  <div class="content-header">
+    <div>
+      <h2 class="content-title card-title">Generate sales report</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <div class="card mb-4">
+        <!-- card-header end// -->
+        <div class="card-body ">
+          
+          <form action="/admin/sales-rep-daily" method="post">
+            <label for="daily"
+              ><h4>Day-Wise</h4></label
+            ><br />
+            <div class="row mt-15">
+              <div class="col">
+                <label for="startDate">Start Date</label><br />
+                <input type="date" id="startDate" name="start" /><br />
+                <label for="endDate" class="mt-15">End Date</label><br />
+                <input type="date" id="endDate" name="end" />
+              </div>
+              <br />
+              <div class="mt-15">
+                <button
+                  class="btn btn-primary"
+                  style="width: 150px"
+                  onclick="report()"
+                >
+                Get report
+                </button>
+              </div>
+              <br />
+            </div>
+          </form>
+        </div>
+        <!-- card-body end// -->
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card mb-4">
+        <!-- card-header end// -->
+        <div class="card-body">
+          <h4 class="mb-3">Month-wise</h4>
+          <form action="/admin/sales-rep-mon" method="POST">
+            <div class="row">
+              <div class="col-7">
+                <input
+                  required
+                  class="form-control mb-3"
+                  type="month"
+                  id="month"
+                  name="month"
+                />
+              </div>
+              <div class="col-5">
+                <button class="btn btn-primary btn-md rounded font-md">
+                  Get report
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- card-body end// -->
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card mb-4">
+        <!-- card-header end// -->
+        <div class="card-body">
+          <h4 class="mb-3">Year-wise</h4>
+          <form action="/admin/sales-rep-yearly" method="POST">
+            <div class="row">
+              <div class="col-7">
+                <input
+                  required
+                  name="year"
+                  class="form-control"
+                  type="number"
+                  placeholder="YYYY"
+                  min="2019"
+                  max="2022"
+                  value="2022"
+                />
+              </div>
+              <div class="col-5">
+                <button class="btn btn-primary btn-md rounded font-md">
+                  Get report
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- card-body end// -->
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <div class="report " id="sales_report" style=" width:650px;">
+
+    <%if(result){%>
+
+
+     <div class="card text-center">
+         <div class="card-body ">
+             <%if(monthly){%>
+             <h4 class=" header-title  text-center">Sales Report - 
+                <%if(mon=='12'){%>
+                    December
+                    <% } %> 
+                    <%if(mon=='11'){%>
+                        November
+                        <% } %>  
+                        <%if(mon=='10'){%>
+                            October
+                            <% } %> 
+                            <%if(mon=='09'){%>
+                                September
+                                <% } %>   
+                                   <%if(mon=='08'){%>
+                                    August
+                                    <% } %> 
+                                    <%if(mon=='07'){%>
+                                        July
+                                        <% } %>  
+                                        <%if(mon=='06'){%>
+                                            June
+                                            <% } %> 
+                                            <%if(mon=='05'){%>
+                                                May
+                                                <% } %>  
+                                                <%if(mon=='04'){%>
+                                                    April
+                                                    <% } %> 
+                                                    <%if(mon=='03'){%>
+                                                        March
+                                                        <% } %>   
+                                                           <%if(mon=='02'){%>
+                                                            February
+                                                            <% } %> 
+                                                            <%if(mon=='01'){%>
+                                                                January
+                                                                <% } %>
+                 
+             </h4>
+            <% } %> 
+             <%if(date){%>
+             <h4 class=" header-title  text-center">Sales Report for <%=startDate %> 
+
+                <%if(startMon=='12'){%>
+                    December
+                    <% } %> 
+
+                    <%if(startMon=='11'){%>
+                        November
+                        <% } %> 
+                        <%if(startMon=='10'){%>
+                            October
+                            <% } %> 
+                            <%if(startMon=='09'){%>
+                                September
+                                <% } %>   
+                                   <%if(startMon=='08'){%>
+                                    August
+                                    <% } %> 
+                                    <%if(startMon=='07'){%>
+                                        July
+                                        <% } %>  
+                                        <%if(startMon=='06'){%>
+                                            June
+                                            <% } %> 
+                                            <%if(startMon=='05'){%>
+                                                May
+                                                <% } %>  
+                                                <%if(startMon=='04'){%>
+                                                    April
+                                                    <% } %> 
+                                                    <%if(startMon=='03'){%>
+                                                        March
+                                                        <% } %>   
+                                                           <%if(startMon=='02'){%>
+                                                            February
+                                                            <% } %> 
+                                                            <%if(startMon=='01'){%>
+                                                                January
+                                                                <% } %>
+               
+                 to 
+                 <%=endDate %> 
+                
+                 
+                <%if(endMon=='12'){%>
+                    December
+                    <% } %> 
+                    <%if(endMon=='11'){%>
+                        November
+                        <% } %> 
+                        <%if(endMon=='10'){%>
+                            October
+                            <% } %> 
+                            <%if(endMon=='09'){%>
+                                September
+                                <% } %>   
+                                   <%if(endMon=='08'){%>
+                                    August
+                                    <% } %> 
+                                    <%if(endMon=='07'){%>
+                                        July
+                                        <% } %>  
+                                        <%if(endMon=='06'){%>
+                                            June
+                                            <% } %> 
+                                            <%if(endMon=='05'){%>
+                                                May
+                                                <% } %>  
+                                                <%if(endMon=='04'){%>
+                                                    April
+                                                    <% } %> 
+                                                    <%if(endMon=='03'){%>
+                                                        March
+                                                        <% } %>   
+                                                           <%if(endMon=='02'){%>
+                                                            February
+                                                            <% } %> 
+                                                            <%if(endMon=='01'){%>
+                                                                January
+                                                                <% } %>
+                 
+             </h4>
+             <% } %>
+
+             <%if(year){%>
+             <h4 class=" header-title  text-center">Sales Report -
+                 <em class="mb-1 card-title"><%=year %>   </em>
+             </h4>
+             <% } %>
+             <table class="table" id="myTable">
+                 <thead>
+                     <tr>
+                         <!-- <th scope="col">Sl. No</th> -->
+                         <th scope="col">Category</th>
+                         <th scope="col">Total Amount</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                    <% result.forEach(result=>{ %>
+
+                     <tr>
+
+                         <!-- <td scope="row">{{counter @index}}</td> -->
+                         <td id="cattd"><%=result._id %> </td>
+                         <td id="totaltd"><%=result.totalAmount %> </td>
+
+                     </tr>
+                     <% }) %> 
+                 </tbody>
+             </table>
+         </div>
+     </div>
+
+     <% } %> 
+ </div> 
+</section>
+<!-- content-main end// -->
+
+<script>
+  $(function () {
+    $('input[name="daterange"]').daterangepicker(
+      {
+        opens: "center",
+        autoApply: true,
+        drops: "auto",
+        locale: {
+          format: "YYYY-MM-DD",
+        },
+      },
+      function (start, end, label) {
+        console.log(
+          "A new date selection was made: " +
+            start.format("DD-MM-YYYY") +
+            " to " +
+            end.format("DD-MM-YYYY")
+        );
+      }
+    );
+  });
+</script>
+
+<%- include('../partials/admin-footer') %>

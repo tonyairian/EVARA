@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Evara Shopping</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="assets/imgs/theme/favicon.svg"
+    />
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+  </head>
+
+  <body>
+    <main class="main">
+      <div class="page-header breadcrumb-wrap">
+        <div class="container">
+          <div class="breadcrumb">
+            <a href="/" rel="nofollow">Home</a>
+            <span></span> Register
+          </div>
+        </div>
+      </div>
+      <section class="pt-150 pb-150">
+        <div class="container">
+          <div class="logo">
+            <a class="mx-auto my-4" href="index.html" style="max-width: 150px;"
+              ><img src="assets/imgs/theme/logo.svg" alt="logo"
+            /></a>
+          </div>
+          <div class="row">
+            <div class="col-lg-10 m-auto d-flex justify-content-center">
+              <div class="row"></div>
+              <div class="col-lg-1"></div>
+              <div class="col-lg-6">
+                <div
+                  class="login_wrap widget-taber-content p-30 background-white border-radius-5"
+                >
+                  <div class="padding_eight_all bg-white">
+                    <div class="heading_s1 text-center">
+                      <h3 class="mb-30">Create an Account</h3>
+                    </div>
+
+                    <form method="post" action="signup">
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          required=""
+                          name="name"
+                          placeholder="Full Name"
+                          onkeyup=" validateName()"
+                          id="contact-name"
+                        />
+                        <span id="name-error" style="color: red"></span>
+                      </div>
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          required=""
+                          name="email"
+                          placeholder="Email"
+                          onkeyup=" validateEmail()"
+                          id="contact-email"
+                        />
+                        <span id="email-error" style="color: red"></span>
+                      </div>
+
+                      <div class="form-group">
+                        <input
+                          required=""
+                          type="number"
+                          name="phonenumber"
+                          placeholder="Phone number"
+                          onkeyup=" validatePhoneNumber()"
+                          id="contact-phonenumber"
+                        />
+                        <span id="number-error" style="color: red"></span>
+                      </div>
+
+                      <div class="form-group">
+                        <input
+                          required=""
+                          type="password"
+                          name="password"
+                          placeholder="Password"
+                          onkeyup="validatePassword()"
+                          id="contact-password"
+                        />
+                        <span id="password-error" style="color: red"></span>
+                      </div>
+
+                      <div class="form-group text-center">
+                        <button
+                          type="submit"
+                          onclick="validateForm()"
+                          class="btn btn-fill-out btn-block hover-up"
+                          id="contact-submit"
+                          name=""
+                        >
+                          Submit &amp; Register
+                        </button>
+                        <div id="submit-error" style="color: red"></div>
+                      </div>
+                    </form>
+                    <div class="divider-text-center mt-15 mb-15">
+                      <span> or</span>
+                    </div>
+
+                    <div class="text-muted text-center">
+                      Already have an account? <a href="/login">login in now</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="custom/validation.js"></script>
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/slick.js"></script>
+    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="assets/js/plugins/wow.js"></script>
+    <script src="assets/js/plugins/jquery-ui.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="assets/js/plugins/magnific-popup.js"></script>
+    <script src="assets/js/plugins/select2.min.js"></script>
+    <script src="assets/js/plugins/waypoints.js"></script>
+    <script src="assets/js/plugins/counterup.js"></script>
+    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="assets/js/plugins/images-loaded.js"></script>
+    <script src="assets/js/plugins/isotope.js"></script>
+    <script src="assets/js/plugins/scrollup.js"></script>
+    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
+    <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
+    <!-- Template  JS -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/shop.js"></script>
+
+    <!-- custom scripts -->
+    <script src="assets/js/sweetalert2.js"></script>
+  </body>
+</html>

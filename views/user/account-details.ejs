@@ -1,0 +1,96 @@
+<%- include('../partials/user-header') %>
+
+<section class="pt-150 pb-150">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 m-auto d-flex justify-content-center">
+        <div class="row"></div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-6">
+          <div
+            class="login_wrap widget-taber-content p-30 background-white border-radius-5"
+          >
+            <div class="padding_eight_all bg-white">
+              <div class="heading_s1 text-center">
+                <h3 class="mb-30">Edit Account Details</h3>
+              </div>
+
+              <form method="post" action='/edit-account-details'>
+                <div class="form-group">
+                  <label for="contact-name">Name</label>
+                  <input
+                    type="text"
+                    required=""
+                    name="name"
+                    value="<%=userDetails.name %> "
+                    placeholder="Full Name"
+                    onkeyup=" validateName()"
+                    id="contact-name"
+                  />
+                  <span id="name-error" style="color: red"></span>
+                </div>
+                <div class="form-group">
+                  <label for="contact-email">Email</label>
+                  <input
+                    type="text"
+                    required=""
+                    name="email"
+                    placeholder="Email"
+                    value="<%=userDetails.email%>"
+                    onkeyup=" validateEmail()"
+                    id="contact-email"
+                    disabled
+                  />
+                  <span id="email-error" style="color: red"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="contact-phonenumber">Phone</label>
+                  <input
+                    required=""
+                    type="number"
+                    name="phonenumber"
+                    value="<%=userDetails.phonenumber %>"
+                    placeholder="Phone number"
+                    onkeyup=" validatePhoneNumber()"
+                    id="contact-phonenumber"
+                  />
+                  <span id="number-error" style="color: red"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="contact-password">Password</label>
+                  <input
+                    required=""
+                    type="password"
+                    name="password"
+                    placeholder="Enter new Password"
+                    value=""
+                    onkeyup="validatePassword()"
+                    id="contact-password"
+                  />
+                  <span id="password-error" style="color: red"></span>
+                </div>
+
+                <div class="form-group text-center">
+                  <button
+                    type="submit"
+                    onclick="validateForm()"
+                    class="btn btn-fill-out btn-block hover-up"
+                    id="contact-submit"
+                    name=""
+                  >
+                    Update Details
+                  </button>
+                  <!-- <div id="submit-error" style="color: red"></div> -->
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%=userDetails.phonenumber %>
+<%- include('../partials/user-footer') %>

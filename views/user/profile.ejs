@@ -1,0 +1,49 @@
+<%- include('../partials/user-header') %>
+<section class="pt-150 pb-150">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 m-auto">
+        <div class="row">
+          <div class="col-md-4">
+
+            <div class="dashboard-menu">
+              <ul class="nav flex-column" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" href="/profile""><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/my-orders"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                </li>
+                <li class="nav-item">
+                  <a href="/my-address" class="nav-link"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                </li>
+                
+                <li class="nav-item">
+                  <a class="nav-link" href="/logout"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                </li>
+              </ul>
+            </div>
+
+
+
+          </div>
+          <div class="col-md-8">
+            <div class="tab-content dashboard-content">
+              <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="mb-0">Hello <%-user.name %>!</h5>
+                  </div>
+                  <div class="card-body">
+                    <p>From your account dashboard. you can easily check &amp; view your <a href="/my-orders">recent orders</a>, manage your <a href="/my-address">addresses</a> and <a href="/edit-account-details">edit your password and account details.</a></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('../partials/user-footer') %>

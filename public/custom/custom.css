@@ -1,0 +1,126 @@
+.edit-product-images .col:hover .delete-product-img {
+  opacity: 1;
+  transition: all .2s;
+}
+
+.delete-product-img {
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: #fff;
+  line-height: 1;
+  text-align: center;
+  padding: 2px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all .2s;
+}
+
+/* Login page */
+.login_wrap {
+  background-color: #fff !important;
+}
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Products listing */
+.product-cart-wrap .product-img-action-wrap .product-img a {
+  min-height: 310px;
+}
+
+.product-cart-wrap .product-img-action-wrap a img {
+  object-fit: cover;
+}
+
+.product-cart-wrap .product-img-action-wrap .product-img a img.hover-img {
+  height: 100%;
+}
+
+/* Single product page */
+.detail-gallery .product-image-slider .slick-slide {
+  min-height: 743px;
+  display: flex;
+}
+
+.detail-gallery .slick-slide img {
+  object-fit: cover !important;
+}
+
+.detail-gallery .slider-nav-thumbnails .slick-slide {
+  min-height: 135px;
+  display: flex;
+}
+
+.product-extra-link2 a.button-add-to-cart {
+  background: #088178;
+  color: #fff;
+  display: inline-block;
+  border-color: #088178;
+  width: auto;
+  height: auto;
+  line-height: inherit;
+}
+
+.product-extra-link2 a.button-add-to-cart:hover {
+  background-color: #046963 !important;
+  border-color: #046963 !important;
+}
+
+/* Product listing */
+.product-cart-wrap .product-action-1 button,
+.product-cart-wrap .product-action-1 a.action-btn {
+  color: #088178;
+}
+
+
+
+/* Browse category dropdown */
+.categori-dropdown-active-large.open {
+  z-index: 99;
+}
+
+/* CART PAGE */
+a.qty-down.disabled {
+  pointer-events: none;
+  opacity: .5;
+}
+
+/* CHECKOUT page */
+.choose-address {
+  padding: 0;
+  background-color: #f7f8f9;
+  border-radius: 10px;
+  border: 1px solid #e2e9e1;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.choose-address label {
+  padding: 10px;
+  margin: 0;
+  display: block;
+}
+
+.custome-radio.choose-address input[type="radio"]+.form-check-label::after {
+  top: 18px;
+  left: 13px;
+}
+
+
+/* SWEET ALERT */

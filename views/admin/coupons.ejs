@@ -1,0 +1,68 @@
+<%- include('../partials/admin-header') %>
+<section class="content-main">
+  <div class="content-header">
+    <div class="col-6">
+      <h2 class="content-title card-title">Coupons</h2>
+      <p>View and manage coupons</p>
+    </div>
+    <div class="col-6 text-end">
+      <a href="/admin/new-coupon" class="btn btn-primary btn-sm rounded">Add new</a>
+    </div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover" id="couponsTable">
+          <thead>
+            <tr>
+              <th scope="col">Coupon code</th>
+              <th scope="col">Discount(%)</th>
+              <th scope="col">Max disocunt</th>
+              <th scope="col">Min cart value</th>
+              <th scope="col">Created on</th>
+              <th scope="col">Expires on</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="text-end"> Action </th>
+            </tr>
+          </thead>
+          <tbody>
+          
+            <% coupons.forEach(coupon => { %>
+              
+            
+            <tr>
+              <td><%=coupon.couponCode %> </td>
+              <td><%=coupon.couponDiscount %>%</td>
+              <td>₹<%=coupon.couponMaxDiscount %></td>
+              <td>₹<%=coupon.couponMinCartValue %></td>
+              <td><%=coupon.date %></td>
+              <td><%=coupon.expiryDate %></td>
+              <td>
+                
+                <span class="badge rounded-pill alert-primary"><%=coupon.status %></span>
+                
+              </td>
+              <td class="text-end">
+                <div class="dropdown">
+                  <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/admin/edit-coupon?id=<%= coupon._id %>">Edit coupon</a>
+                    <a class="dropdown-item text-danger" href="/admin/delete-coupon?id=<%= coupon._id %>" onclick="return confirm('Do you want to delete <%= coupon.couponCode %>')">Delete</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <%}); %> 
+        
+            
+          </tbody>
+        </table>
+      </div> <!-- table-responsive //end -->
+    </div> <!-- card-body end// -->
+  </div> <!-- card end// -->
+</section>
+<%- include('../partials/admin-footer') %>
+
+
+
+

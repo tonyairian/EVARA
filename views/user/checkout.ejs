@@ -1,0 +1,480 @@
+<%- include('../partials/user-header') %>
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/" rel="nofollow">Home</a>
+        <span></span> Shop <span></span> Checkout
+      </div>
+    </div>
+  </div>
+  <section class="mt-50 mb-50">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="divider mt-50 mb-50"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!----------------------------- payment  ------------------------------->
+        <!-- <div class="toggle_info">
+          <span><i class="fi-rs-user mr-10"></i><span class="text-muted">Want to ship to a new location?</span> <a href="#newAddress" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Add new address</a></span>
+        </div>
+        <div class="panel-collapse collapse login_form" id="newAddress">
+          <div class="panel-body">
+          </div>
+        </div> -->
+
+        <!-------------------------------------------------- form ----------------------------------------->
+        <div class="col-md-6">
+          <!-- address -->
+          <% let i=0 %> <% userAddresses.forEach(user => {%>
+
+          <div class="address-list mb-3">
+            <div class="form-check mb-3 choose-address">
+              <input
+                style="margin-top: 2ch"
+                class="form-check-input deliveryAddress"
+                type="radio"
+                name="address"
+                onclick="fillTheForm( '<%=user.name %>', '<%=user.address %>',
+            '<%=user.city %>', '<%=user.state %>', '<%=user.pincode %>',
+            '<%=user.phone %>', '<%=user.email %>', )"
+              />
+
+              <label class="form-check-label" for="deliveryAddress">
+                <%=user.name %> ,<%=user.phone %> ,<%=user.address %> ,
+                <%=user.city %> , <%=user.state %>...
+                <!-- <a
+                  class="me-2"
+                  onclick="editAddress(
+                          
+                  '<%=userAddresses[i].addressId %>',
+                  '<%=user.name %>',
+                  '<%=user.address %>',
+                  '<%=user.city %>',
+                  '<%=user.state %>',
+                  '<%=user.pincode %>',
+                  '<%=user.phone %>',
+                  '<%=user.email %>',
+                  )"
+                  style="color: #088178; float: right"
+                  >Edit</a
+                > -->
+              </label>
+            </div>
+          </div>
+          <%i++ }); %>
+          <!-- address -->
+          <div class="mb-25">
+            <h4>Billing Details</h4>
+          </div>
+          <form method="post" id="checkout-form" action="/place-order">
+            <div class="form-group">
+              <input
+                type="text"
+                required=""
+                name="name"
+                id="name"
+                placeholder="Full Name *"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                required
+                type="text"
+                name="address"
+                id="address"
+                placeholder="Address *"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                required
+                type="text"
+                name="city"
+                id="city"
+                placeholder="City / Town *"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                required
+                type="text"
+                name="state"
+                placeholder="State / County *"
+                id="state"
+              />
+            </div>
+
+            <div class="form-group">
+              <input
+                required=""
+                type="text"
+                name="pincode"
+                id="pinCode"
+                placeholder="Postcode / PIN *"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                required=""
+                type="text"
+                name="phone"
+                id="phone"
+                placeholder="Phone *"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                required=""
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email address *"
+              />
+            </div>
+
+            <div class="payment_method">
+              <div class="mb-25">
+                <h5>Payment</h5>
+              </div>
+              <div class="payment_option">
+                <div>
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="paymentMethod"
+                    id="cod"
+                    value="COD"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="razorpay"
+                    data-bs-toggle="collapse"
+                    >Cash On Delivery</label
+                  >
+                </div>
+                <div>
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="paymentMethod"
+                    id="cod"
+                    value="razorpay"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="razorpay"
+                    data-bs-toggle="collapse"
+                    >Razorpay</label
+                  >
+                </div>
+                <div>
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="paymentMethod"
+                    id="cod"
+                    value="paypal"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="paypal"
+                    data-bs-toggle="collapse"
+                    data-target="#paypal"
+                    aria-controls="paypal"
+                    >Paypal</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button
+                type="button"
+                onclick="placeOrder()"
+                class="btn btn-fill-out btn-block hover-up"
+              >
+                PLACE ORDER
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <div class="order_review">
+            <div class="mb-20">
+              <h4 class="text-center">Your Orders</h4>
+
+              <!-- coupon -->
+              <div class="mt-5">
+                <div class="toggle_info">
+                  <span
+                    ><i class="fi-rs-label mr-10"></i
+                    ><span class="text-muted">Have a coupon?</span>
+                    <a
+                      href="#coupon"
+                      data-bs-toggle="collapse"
+                      class="collapsed"
+                      aria-expanded="false"
+                      >Click here to enter your code</a
+                    ></span
+                  >
+                </div>
+                <div class="panel-collapse collapse coupon_form" id="coupon">
+                  <div class="panel-body">
+                    <p class="mb-30 font-sm">
+                      If you have a coupon code, please apply it below.
+                    </p>
+                    <form>
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          placeholder="Enter Coupon Code..."
+                          id="coupon-code"
+                          style="text-transform: uppercase"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <p id="invalid" style="color: red"></p>
+
+                        <span></span>
+                        <button
+                          class="btn btn-md"
+                          type="button"
+                          onclick="applyCoupon('<%=totalAmount %>')"
+                        >
+                          Apply Coupon
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <!-- coupon -->
+            </div>
+            <div class="table-responsive order_table text-center">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th colspan="2">Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%let j=0 %> <% cartItems.forEach(products => {%>
+
+                  <tr>
+                    <td class="image product-thumbnail">
+                      <img
+                        src="/product-images/<%- products.Product._id %>0.png"
+                        alt="#"
+                      />
+                    </td>
+                    <td>
+                      <h5>
+                        <a href="shop-product-full.html"
+                          ><%=products.Product.name%></a
+                        >
+                      </h5>
+                      <span class="product-qty"
+                        ><%=products.Product.description %>
+                      </span>
+                    </td>
+                    <td>₹<%=products.Product.price %></td>
+                    <td><%=cartItems[j].quantity %></td>
+                  </tr>
+                  <%j++ }); %>
+                  <tr>
+                    <th>SubTotal</th>
+                    <td class="product-subtotal" colspan="3">
+                      ₹<%=totalAmount %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Shipping</th>
+                    <td colspan="3"><em>Free Shipping</em></td>
+                  </tr>
+                  <tr>
+                    <th>Total</th>
+                    <td colspan="3" class="product-subtotal">
+                      <% if (afterCouponOffer==0) {%>
+                      <span class="font-xl text-brand fw-900"
+                        >₹<%=totalAmount %>
+                      </span>
+                      <%} else {%>
+                      <span class="font-xl text-brand fw-900"
+                        >₹<%=afterCouponOffer %>
+                      </span>
+                      <% } %>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+
+            <!-- <a onclick="placeOrder()" class="btn btn-fill-out btn-block mt-30"
+              >Place Order</a
+            > -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  function placeOrder() {
+    const name = document.getElementById("name").value;
+    const address = document.getElementById("address").value;
+    const city = document.getElementById("city").value;
+    const state = document.getElementById("state").value;
+    const pincode = document.getElementById("pinCode").value;
+    const phone = document.getElementById("phone").value;
+    const email = document.getElementById("email").value;
+    const cod = document.getElementById("cod").value;
+
+    const paymentMethod = document.querySelector(
+      'input[id="cod"]:checked'
+    ).value;
+
+    console.log(paymentMethod);
+    $.ajax({
+      url: "/place-order",
+      method: "post",
+      data: {
+        name: name,
+        address: address,
+        city: city,
+        state: state,
+        pincode: pincode,
+        phone: phone,
+        email: email,
+        paymentMethod: paymentMethod,
+      },
+      success: (response) => {
+        if (response.codSuccess) {
+          window.location.href = "/placed";
+        } else if (response.payPal) {
+          for (let i = 0; i < response.links.length; i++) {
+            if (response.links[i].rel === "approval_url") {
+              location.href = response.links[i].href;
+            }
+          }
+        } else {
+          razorpay(response);
+        }
+      },
+    });
+  }
+
+  function razorpay(data) {
+    var options = {
+      key: "rzp_test_84iChAwqz25k5b", // Enter the Key ID generated from the Dashboard
+      amount: data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "Evara",
+      description: "Test Transaction",
+      image: "https://evara.ml/user-assets/imgs/theme/logo.svg",
+      order_id: data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: function (response) {
+        verifyPayment(response, data);
+      },
+
+      modal: {
+        ondismiss: function () {
+          window.location.replace(
+            "http://localhost:3000/cancel-payment?id=" + data.receipt
+          );
+          console.log("Checkout form closed");
+        },
+      },
+
+      prefill: {
+        name: data.name,
+        email: data.email,
+        contact: data.phone,
+      },
+      notes: {
+        address: "DM Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (){
+      console.log("-----------");
+      console.log(data.receipt);
+      console.log("-----------");
+      window.location.href= "http://localhost:3000/payment-failed?id=" + data.receipt
+     
+
+});
+
+    rzp1.open();
+  }
+
+  function verifyPayment(payment, order) {
+    $.ajax({
+      url: "/verify-payment",
+      method: "post",
+      data: {
+        payment,
+        order,
+      },
+      success: (response) => {
+        if (response.status) {
+          window.location.href = "/placed";
+        } else {
+          alert("payment failed");
+          location.reload();
+        }
+      },
+    });
+  }
+
+  function fillTheForm(name, address, city, state, pincode, phone, email) {
+    $("#name").val(name);
+    $("#address").val(address);
+    $("#city").val(city);
+    $("#state").val(state);
+    $("#pinCode").val(pincode);
+    $("#phone").val(phone);
+    $("#email").val(email);
+  }
+  function applyCoupon(totalAmount) {
+    const coupon = document.getElementById("coupon-code").value;
+    console.log(coupon);
+    $.ajax({
+      url: "/apply-coupon",
+      method: "post",
+      data: {
+        totalAmount,
+        coupon,
+      },
+      success: (response) => {
+        if (response.invalidCoupon) {
+          const invalidEl = document.getElementById("invalid");
+          invalidEl.innerHTML = "Invalid Coupon";
+          invalidEl.style.color = "red";
+        }
+        if (response.isUsed) {
+          const invalidEl = document.getElementById("invalid");
+          invalidEl.innerHTML = "Coupon Already Used";
+          invalidEl.style.color = "grey";
+        }
+        if (response.isUsed == false) {
+          const invalidEl = document.getElementById("invalid");
+          invalidEl.innerHTML = "Coupon Applied";
+          invalidEl.style.color = "green";
+        }
+      },
+    });
+    console.log(totalAmount);
+  }
+</script>
+<%- include('../partials/user-footer') %>

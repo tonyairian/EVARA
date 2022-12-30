@@ -1,0 +1,141 @@
+<%- include('../partials/admin-header') %>
+<section class="content-main">
+  <div class="content-header">
+    <div>
+      <h2 class="content-title card-title">Products List</h2>
+      <!-- <p>Lorem ipsum dolor sit amet.</p> -->
+    </div>
+    <div>
+      <!-- <a href="#" class="btn btn-light rounded font-md">Export</a>
+          <a href="#" class="btn btn-light rounded  font-md">Import</a> -->
+      <a href="add-product" class="btn btn-primary btn-sm rounded"
+        >Add product</a
+      >
+    </div>
+    
+  </div>
+  <div class="card mb-4">
+    <header class="card-header">
+      <div class="row align-items-center">
+        <!-- <div class="col col-check flex-grow-0">
+                  <div class="form-check ms-2">
+                      <input class="form-check-input" type="checkbox" value="">
+                  </div>
+              </div> -->
+        <!-- <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                  <select class="form-select">
+                      <option selected>All category</option>
+                      <option>Electronics</option>
+                      <option>Clothes</option>
+                      <option>Automobile</option>
+                  </select>
+              </div> -->
+        <!-- <div class="col-md-2 col-6">
+                  <input type="date" value="02.05.2021" class="form-control">
+              </div>
+              <div class="col-md-2 col-6">
+                  <select class="form-select">
+                      <option selected>Status</option>
+                      <option>Active</option>
+                      <option>Disabled</option>
+                      <option>Show all</option>
+                  </select>
+              </div> -->
+      </div>
+    </header>
+    <!-- card-header end// -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% let i=1 %> <% products.forEach(product=>{ %>
+
+            <tr>
+              <td>
+                <a href="#" class="itemside">
+                  <div class="left">
+                    <p class="fs-6"><%=i %></p>
+                  </div>
+                </a>
+              </td>
+
+              <td>
+                <div>
+                  <img
+                    style="width: 50px; height: 50px"
+                    src="/product-images/<%-product._id %>0.png "
+                    alt=""
+                  />
+                </div>
+              </td>
+
+              <td>
+                <div class="info pl-3">
+                  <p class="mb-0 title"><%=product.name %></p>
+                </div>
+              </td>
+              <td><%-product.category %></td>
+              <td>
+                <div class="info">
+                  <p class="mb-0 title"><%=product.description %></p>
+                </div>
+              </td>
+
+              <td>
+                <div class="info">
+                  <p class="mb-0 title"><%=product.price %></p>
+                </div>
+              </td>
+
+              <td class="text-center">
+                <a
+                  href="/admin/edit-product?id=<%=product._id %> "
+                  class="btn btn-sm btn-warning rounded font-sm mt-15"
+                  >Edit</a
+                >
+                <a
+                  href="/admin/delete-product?id=<%=product._id %> "
+                  class="btn btn-sm btn-danger rounded font-sm mt-15"
+                  onclick="return confirm('Are you sure you want to delete <%=product.name %>?');"
+                  >Delete</a
+                >
+              </td>
+            </tr>
+
+            <% i++}) %>
+          </tbody>
+        </table>
+        <!-- table-responsive.// -->
+      </div>
+    </div>
+    <!-- card-body end// -->
+  </div>
+  <!-- card end// -->
+  <div class="pagination-area mt-30 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+          <% for(let i=1;i<=pages;i++) { %> 
+            <% if(i==currentPage) {%> 
+              <li class="page-item active"><a class="page-link" href="/admin/products?page=<%=i %>"><%=i %> </a></li>
+              <% } else { %> 
+                <li class="page-item"><a class="page-link" href="/admin/products?page=<%=i %>"><%=i %> </a></li>
+                <% } %>   
+            <% } %> 
+          
+        </ul>
+    </nav>
+</div>
+</section>
+<!-- content-main end// -->
+<%- include('../partials/admin-footer') %>
