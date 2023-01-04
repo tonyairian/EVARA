@@ -17,6 +17,8 @@ router.get("/product", userController.viewProduct);
 router.get("/add-to-cart", verifyLoginAjax, userController.addToCart);
 router.get("/add-to-wishlist", verifyLoginAjax, userController.addToWishlist);
 router.get("/category-product", userController.viewCategoryProducts);
+router.get("/error", userController.errorPage);
+router.post("/search", userController.searchResults);
 router.use(verifyLogin);
 router.get("/cart", userController.getCartProducts);
 router.post("/change-product-quantity", userController.changeProductQuantity);
@@ -40,8 +42,7 @@ router.get("/edit-account-details", userController.editAccountDetails);
 router.post("/edit-account-details", userController.updateAccountDetails);
 router.post("/return-product", userController.returnProduct);
 router.post("/apply-coupon", userController.applyCoupon);
-router.post('/search', userController.searchResults);
-router.get('/cancel-payment',userController.razorpayFailed)
-router.get('/payment-failed',userController.razorFailure)
+router.get("/cancel-payment", userController.razorpayFailed);
+router.get("/payment-failed", userController.razorFailure);
 
 module.exports = router;

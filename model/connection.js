@@ -36,7 +36,8 @@ const productSchema = new mongoose.Schema({
   discountPercentage:Number,
   categoryDiscount:Number,
   offerPrice:Number,
-  originalPrice:Number
+  originalPrice:Number,
+  categoryId:mongoose.Types.ObjectId,
 });
 
 const adminSchema = new mongoose.Schema({

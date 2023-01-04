@@ -98,11 +98,37 @@
   <% } %>
 </main>
 <script>
+  // function addTocart(proId) {
+  //   $.ajax({
+  //     url: "/add-to-cart?id=" + proId,
+  //     method: "get",
+  //     success: (response) => {
+  //       if (response.status) {
+  //         let cartCount = $("#cartCount").html();
+  //         cartCount = parseInt(cartCount) + 1;
+  //         $("#cartCount").html(cartCount);
+  //       }
+  //       // alert(response)
+  //     },
+  //   });
+  // }
+
   function addTocart(proId) {
     $.ajax({
       url: "/add-to-cart?id=" + proId,
       method: "get",
       success: (response) => {
+        if (response.loggedIn == false) {
+          window.location.href = "/login";
+          return true;
+        }
+        Swal.fire({
+          position: "",
+          icon: "success",
+          title: "Product added to cart",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         if (response.status) {
           let cartCount = $("#cartCount").html();
           cartCount = parseInt(cartCount) + 1;

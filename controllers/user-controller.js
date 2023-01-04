@@ -3,11 +3,11 @@ const userHelper = require("../helpers/user-helper");
 const cartHelper = require("../helpers/cart-helper");
 const { product, user } = require("../model/connection");
 const wishlistHelper = require("../helpers/wishlist-helper");
-require('dotenv').config()
-let YOUR_ACCOUNT_SID = process.env.ACCOUNT_SID
-let YOUR_AUTH_TOKEN = process.env.AUTH_TOKEN
-let YOUR_SERVICE_ID = process.env.SERVICE_ID 
-var client = require('twilio')(YOUR_ACCOUNT_SID, YOUR_AUTH_TOKEN)
+require("dotenv").config();
+let YOUR_ACCOUNT_SID = process.env.ACCOUNT_SID;
+let YOUR_AUTH_TOKEN = process.env.AUTH_TOKEN;
+let YOUR_SERVICE_ID = process.env.SERVICE_ID;
+var client = require("twilio")(YOUR_ACCOUNT_SID, YOUR_AUTH_TOKEN);
 
 const db = require("../model/connection");
 
@@ -35,9 +35,10 @@ const landingPage = async (req, res) => {
   let catCount = await userHelper.getCatCount();
   let productArray = new Array();
   for (i = 0; i < catCount.length; i++) {
-    let prod = await userHelper.getCategory(catCount[i].categoryName);
+    let prod = await userHelper.getCategory(catCount[i]._id);
     productArray.push(prod);
   }
+  console.log(productArray);
   //RENDER HOME PAGE
   userHelper.getProducts().then((product) => {
     let user = req.session.user;
@@ -515,6 +516,10 @@ const razorFailure = async (req, res) => {
   });
 };
 
+const errorPage = (req, res) => {
+  res.render("user/error");
+};
+
 module.exports = {
   userSignup,
   landingPage,
@@ -553,4 +558,5 @@ module.exports = {
   searchResults,
   razorpayFailed,
   razorFailure,
+  errorPage,
 };

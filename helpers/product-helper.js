@@ -21,15 +21,20 @@ const getCategories = (req, res) => {
 //       });
 //   });
 // };
-const addProduct = (productData) => {
+const addProduct = async (productData) => {
   productData.price = parseInt(productData.price);
+  const result = await db.category.aggregate([
+    {
+      $match: { categoryName: productData.category },
+    },
+  ]);
+  productData.categoryId = result[0]._id;
   return new Promise(async (resolve, reject) => {
-      db.product(productData)
-        .save()
-        .then((data) => {
-          resolve(data);
-        });
-    
+    db.product(productData)
+      .save()
+      .then((data) => {
+        resolve(data);
+      });
   });
 };
 //gets all the products from  db and returns to getAllproducts//
@@ -119,10 +124,10 @@ const categories = (req, res) => {
     db.category
       .find({})
       .then((categories) => {
-        res.render("admin/categories", { layout: "admin-layout", categories });
+        res.render("admin/categories", { categories });
       })
       .catch((err) => {
-        console.log("categories get error");
+        res.render("user/error");
       });
   });
 };
@@ -162,7 +167,7 @@ const deleteCategory = (req, res) => {
 const editCategory = async (req, res) => {
   const categoryId = req.query.id;
   let category = await getCategoryDetails(categoryId);
-  res.render("admin/edit-categories", { layout: "admin-layout", category });
+  res.render("admin/edit-categories", { category });
 };
 
 //gets the category from the db//
@@ -190,8 +195,19 @@ const updateCategory = (req, res) => {
           },
         }
       )
-      .then((data) => {
-        res.redirect("/admin/categories");
+      .then(async (data) => {
+        await db.product
+          .updateOne(
+            { categoryId: categoryId },
+            {
+              $set: {
+                category: categoryDetails.categoryName,
+              },
+            }
+          )
+          .then(() => {
+            res.redirect("/admin/categories");
+          });
       })
       .catch((err) => {
         console.log("category update failed");

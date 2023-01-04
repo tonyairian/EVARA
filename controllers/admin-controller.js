@@ -8,15 +8,16 @@ const adminLandingPage = async function (req, res) {
   let admin = req.session.loggedIn;
   let totalAmount = await adminHelper.totalAmount();
   let totalOrders = await adminHelper.totalOrders();
-
   let totalProducts = await adminHelper.totalProducts();
   let totalCategories = await adminHelper.totalCategories();
+  const deliveredRevenue=await adminHelper.deliveredRevenue();
   if (admin) {
     res.render("admin/index", {
       totalAmount,
       totalOrders,
       totalProducts,
       totalCategories,
+      deliveredRevenue
     });
   } else {
     res.redirect("/admin/login");
@@ -248,6 +249,7 @@ const dailySalesReport = async (req, res) => {
 
 const yearlySalesReport = async (req, res) => {
   let year = req.body.year;
+  console.log(year);
   let result = await adminHelper.getYearlySalesReport(year);
   res.render("admin/generate-report", {
     result,
@@ -336,7 +338,6 @@ const editBanner = (req, res) => {
 const viewOffer = async (req, res) => {
   try {
     let category = await adminHelper.getCategories();
-    console.log(category);
     res.render("admin/offer", { category });
   } catch (error) {
     res.render("admin/error");

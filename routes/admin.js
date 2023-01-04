@@ -47,8 +47,4 @@ router.post("/edit-banner", adminController.editBanner);
 router.get("/offer", adminController.viewOffer);
 router.post("/admin-addCategoryOffer", adminController.addCategoryOffer);
 router.get("/delete-offer", adminController.removeCategoryOffer);
-// router.get("/delete-offer", (req,res)=>{
-//   console.log(req.query.id);
-// });
-
 module.exports = router;

@@ -28,6 +28,15 @@
 
         <!-------------------------------------------------- form ----------------------------------------->
         <div class="col-md-6">
+          <div class="mb-5">
+            <div class="toggle_info">
+              <span
+                ><i class="fi-rs-label mr-10"></i
+                ><span class="text-muted">Add Address</span>
+                <a href="/my-address">Click here to Add new address</a></span
+              >
+            </div>
+          </div>
           <!-- address -->
           <% let i=0 %> <% userAddresses.forEach(user => {%>
 
@@ -66,9 +75,10 @@
             </div>
           </div>
           <%i++ }); %>
+
           <!-- address -->
           <div class="mb-25">
-            <h4>Billing Details</h4>
+            <h4>Delivery Details</h4>
           </div>
           <form method="post" id="checkout-form" action="/place-order">
             <div class="form-group">
@@ -406,14 +416,13 @@
       },
     };
     var rzp1 = new Razorpay(options);
-    rzp1.on('payment.failed', function (){
+    rzp1.on("payment.failed", function () {
       console.log("-----------");
       console.log(data.receipt);
       console.log("-----------");
-      window.location.href= "http://localhost:3000/payment-failed?id=" + data.receipt
-     
-
-});
+      window.location.href =
+        "http://localhost:3000/payment-failed?id=" + data.receipt;
+    });
 
     rzp1.open();
   }

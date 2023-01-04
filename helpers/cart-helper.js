@@ -4,11 +4,11 @@ const { user, product, coupon } = require("../model/connection");
 const db = require("../model/connection");
 const CC = require("currency-converter-lt");
 const moment = require("moment");
-require('dotenv').config()
+require("dotenv").config();
 const Razorpay = require("razorpay");
 const { resolve } = require("path");
 var instance = new Razorpay({
-  key_id: process.env.KEY_ID ,
+  key_id: process.env.KEY_ID,
   key_secret: process.env.KEY_SECRET,
 });
 
@@ -327,7 +327,7 @@ const generateRazorpay = async (userId, total) => {
 const verifypayment = (data) => {
   return new Promise((resolve, reject) => {
     const crypto = require("crypto");
-    let hmac = crypto.createHmac("sha256",process.env.KEY_SECRET);
+    let hmac = crypto.createHmac("sha256", process.env.KEY_SECRET);
     hmac.update(
       data["payment[razorpay_order_id]"] +
         "|" +
@@ -454,7 +454,7 @@ const applyCoupon = async (details, userId, date, totalAmount) => {
       response.isActive = false;
 
       //updating cart
-      await db.get().cart.updateOne(
+      await db.cart.updateOne(
         { user: userId },
         {
           $set: {

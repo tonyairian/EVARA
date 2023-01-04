@@ -62,9 +62,9 @@ const getCatCount = (req, res) => {
   });
 };
 
-const getCategory = (catName) => {
+const getCategory = (catId) => {
   return new Promise(async (resolve, reject) => {
-    await db.product.findOne({ category: catName }).then((response) => {
+    await db.product.findOne({ categoryId: catId }).then((response) => {
       resolve(response);
     });
   });

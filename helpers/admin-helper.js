@@ -638,6 +638,62 @@ const removeCategoryOffer = (catId) => {
       });
   });
 };
+const deliveredRevenue=(req,res)=>{
+  return new Promise(async (resolve, reject) => {
+    const date = new Date();
+
+    await db.order
+      .aggregate([
+        {
+          $unwind: {
+            path: "$products",
+          },
+        },
+        {
+          $match: { "products.status": "Delivered" },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "products.item",
+            foreignField: "_id",
+            as: "output",
+          },
+        },
+        {
+          $unwind: {
+            path: "$output",
+          },
+        },
+     
+
+
+        {
+          $group: {
+            _id: 1,
+            totalAmount: { $sum: "$output.price" },
+          }, 
+        },
+        {
+          $project: {
+            _id: 1,
+            totalAmount: 1,
+          },
+        },
+        {
+          $sort: {
+            _id: 1,
+          },
+        },
+      ])
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
 module.exports = {
   adminLogin,
   getUsers,
@@ -669,5 +725,6 @@ module.exports = {
   addCategoryOffer,
   getProductForOffer,
   addOfferToProduct,
-  removeCategoryOffer
+  removeCategoryOffer,
+  deliveredRevenue
 };
