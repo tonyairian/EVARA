@@ -32,8 +32,6 @@ const adminLogin = function (req, res, next) {
   } else {
     res.render("admin/login", {
       loginErr: req.session.adminLoginErr,
-
-      layout: "admin-layout",
     });
     req.session.adminLoginErr = false;
   }
