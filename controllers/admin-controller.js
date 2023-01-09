@@ -2,16 +2,18 @@ const { render } = require("ejs");
 const { response } = require("express");
 const adminHelper = require("../helpers/admin-helper");
 const productHelper = require("../helpers/product-helper");
+const db = require("../model/connection");
 
 //render admin home page and creates a session//
 const adminLandingPage = async function (req, res) {
-  let admin = req.session.loggedIn;
+  req.session.admin=await db.admin.find();
+  console.log( req.session.admin.name);
   let totalAmount = await adminHelper.totalAmount();
   let totalOrders = await adminHelper.totalOrders();
   let totalProducts = await adminHelper.totalProducts();
   let totalCategories = await adminHelper.totalCategories();
   const deliveredRevenue=await adminHelper.deliveredRevenue();
-  if (admin) {
+  if (req.session.admin) {
     res.render("admin/index", {
       totalAmount,
       totalOrders,

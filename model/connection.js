@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { objectId } = require("mongoose");
-const db = mongoose.connect("mongodb://localhost:27017/Ecommerce");
+require("dotenv").config();
+// const db = mongoose.connect("mongodb://localhost:27017/Ecommerce");
+const db = mongoose.connect(process.env.DATABASE);
 const { ObjectId } = require("mongodb");
 
 db.then(() => {
