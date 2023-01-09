@@ -19,7 +19,7 @@ router.get("/add-to-wishlist", verifyLoginAjax, userController.addToWishlist);
 router.get("/category-product", userController.viewCategoryProducts);
 router.get("/error", userController.errorPage);
 router.post("/search", userController.searchResults);
-router.use(verifyLogin);
+// router.use(verifyLogin);
 router.get("/cart", userController.getCartProducts);
 router.post("/change-product-quantity", userController.changeProductQuantity);
 router.post("/delete-product", userController.deleteProductFromCart);
