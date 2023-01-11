@@ -58,22 +58,42 @@
             </h2>
             <div class="rating-result" >
               <span>
-                <% if (product.discountPercentage==0) {%> 
+                <!-- <% if (product.discountPercentage==0) {%> 
                   <span>No offer</span>
                   <% } else {%> 
                     <span><%=product.discountPercentage%>%</span>
                     <% } %> 
+                   -->
+                   <% if (product.discountPercentage==0) {%> 
+                    <span>No offer</span>
+                    <% } else {%> 
+                      <% if (product.discountPercentage>product.productOffer) {%>
+                        <span class="save-price font-md color3 ml-15"
+                        ><%-product.discountPercentage %>% Off</span
+                      >
+                        <% } else {%>
+                          <span class="save-price font-md color3 ml-15"
+                        ><%-product.productOffer %>% Off</span
+                      >
+                          <% } %> 
+                      <% } %> 
+                    
                   
               </span>
             </div>
           
-            
+            <span class="old-price font-md ">₹<s><%-product.originalPrice %></s></span>
             <div class="product-price">
-              <% if(product.categoryDiscount) { %> 
-              <p><s>₹<%=product.originalPrice %></s></p>
-              <% } %>  
+            
+              <% if (product.discountPercentage>product.productOffer) {%>
+            
+              <span>₹<%-product.price %></span>
+               <%} else {%>
+           
+              <span>₹<%-parseInt(product.originalPrice-(product.originalPrice)*(product.productOffer)/100) %></span>
+              <% } %> 
               <div>
-                <span>₹<%=product.price %></span>
+              
               </div>
             </div>
             <div class="product-action-1 show">

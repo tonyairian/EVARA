@@ -153,6 +153,7 @@ const viewProduct = async (req, res) => {
     let cartCount = await cartHelper.getCartCount(userId);
     wishlistCount = await cartHelper.getWishlistCount(userId);
     userHelper.viewProduct(id).then((product) => {
+      console.log(product);
       res.render("user/product", {
         user,
         product,
@@ -188,6 +189,7 @@ const getCartProducts = async (req, res) => {
     .then((cartItems) => {
       const emptyCart = cartItems.length;
       let user = req.session.user;
+      console.log(cartItems);
       res.render("user/cart", {
         user,
         cartItems,

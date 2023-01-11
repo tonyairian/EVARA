@@ -76,15 +76,33 @@
                   </div>
                   <div class="clearfix product-price-cover">
                     <div class="product-price primary-color float-left">
+
+                     <% if (product.discountPercentage>product.productOffer) {%>
                       <ins
-                        ><span class="text-brand"
-                          >₹<%-product.price %>
-                        </span></ins
-                      >
+                      ><span class="text-brand"
+                        >₹<%-product.price %>
+                      </span></ins
+                    >
+                     <%} else {%>
+                      <ins
+                      ><span class="text-brand"
+                        >₹<%-parseInt(product.originalPrice-(product.originalPrice)*(product.productOffer)/100) %>
+                      </span></ins
+                    >
+                    <% } %> 
+
+                    
                       <ins><span class="old-price font-md ml-15">₹<%-product.originalPrice %></span></ins>
-                      <span class="save-price font-md color3 ml-15"
+                      <% if (product.discountPercentage>product.productOffer) {%>
+                        <span class="save-price font-md color3 ml-15"
                         ><%-product.discountPercentage %>% Off</span
                       >
+                        <% } else {%>
+                          <span class="save-price font-md color3 ml-15"
+                        ><%-product.productOffer %>% Off</span
+                      >
+                          <% } %> 
+                    
                     </div>
                   </div>
                   <div class="bt-1 border-color-1 mt-15 mb-15"></div>

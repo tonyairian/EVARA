@@ -10,19 +10,9 @@ const getCategories = (req, res) => {
     });
   });
 };
-
-//Adds a new product to the db//
-// const addProduct = (product,image) => {
-//   return new Promise((resolve, reject) => {
-//     db.product(product)
-//       .save()
-//       .then((result) => {
-//         resolve(result);
-//       });
-//   });
-// };
 const addProduct = async (productData) => {
   productData.price = parseInt(productData.price);
+  productData.productOffer = parseInt(productData.productOffer);
   const result = await db.category.aggregate([
     {
       $match: { categoryName: productData.category },
@@ -98,8 +88,6 @@ const updateProduct = (req, res) => {
   return new Promise((resolve, reject) => {
     let productId = req.params.id;
     let productDetails = req.body;
-    console.log(req.body);
-    console.log(productId);
     db.product
       .updateOne(
         // { _id: objectId('productId') },//false
@@ -109,7 +97,7 @@ const updateProduct = (req, res) => {
             name: productDetails.name,
             description: productDetails.description,
             price: productDetails.price,
-          },
+            productOffer:productDetails.productOffer},
         }
       )
       .then((result) => {

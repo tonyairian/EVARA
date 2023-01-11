@@ -40,6 +40,7 @@ const productSchema = new mongoose.Schema({
   offerPrice:Number,
   originalPrice:Number,
   categoryId:mongoose.Types.ObjectId,
+  productOffer:Number
 });
 
 const adminSchema = new mongoose.Schema({
