@@ -213,6 +213,7 @@ const changeProductQuantity = async (req, res) => {
     .changeProductQuantity(cartId, productId, count, quantity)
     .then(async (response) => {
       response.total = await cartHelper.getTotalAmount(userId);
+      response.productPrice=await cartHelper.getProductPrice(productId)
       res.json(response);
     });
 };

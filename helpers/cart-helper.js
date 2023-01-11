@@ -519,6 +519,13 @@ const userCart = (userId) => {
   });
 };
 
+const getProductPrice = async (productId) => {
+  return new Promise(async (resolve, reject) => {
+    const result = await db.product.findOne({ _id: productId });
+    resolve(result);
+  });
+};
+
 module.exports = {
   addToCart,
   getCartProducts,
@@ -536,4 +543,5 @@ module.exports = {
   applyCoupon,
   deleteCartProducts,
   userCart,
+  getProductPrice,
 };

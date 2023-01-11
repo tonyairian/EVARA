@@ -7,13 +7,25 @@
   <div class="container">
     <div class="tab-header">
       <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true"><%-products[0].category %></button>
-          </li>
-        
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="nav-tab-one"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-one"
+            type="button"
+            role="tab"
+            aria-controls="tab-one"
+            aria-selected="true"
+          >
+            <%-products[0].category %>
+          </button>
+        </li>
       </ul>
-      <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
-  </div>
+      <!-- <a href="#" class="view-more d-none d-md-flex"
+        >View More<i class="fi-rs-angle-double-small-right"></i
+      ></a> -->
+    </div>
     <!--End nav-tabs-->
     <div class="row product-grid-4">
       <%products.forEach(product => {%>
@@ -56,7 +68,7 @@
             <h2>
               <a href="shop-product-right.html"><%-product.name %> </a>
             </h2>
-            <div class="rating-result" >
+            <div class="rating-result">
               <span>
                 <!-- <% if (product.discountPercentage==0) {%> 
                   <span>No offer</span>
@@ -64,37 +76,36 @@
                     <span><%=product.discountPercentage%>%</span>
                     <% } %> 
                    -->
-                   <% if (product.discountPercentage==0) {%> 
-                    <span>No offer</span>
-                    <% } else {%> 
-                      <% if (product.discountPercentage>product.productOffer) {%>
-                        <span class="save-price font-md color3 ml-15"
-                        ><%-product.discountPercentage %>% Off</span
-                      >
-                        <% } else {%>
-                          <span class="save-price font-md color3 ml-15"
-                        ><%-product.productOffer %>% Off</span
-                      >
-                          <% } %> 
-                      <% } %> 
-                    
-                  
+                <% if (product.discountPercentage==0) {%>
+                <span>No offer</span>
+                <% } else {%> <% if
+                (product.discountPercentage>product.productOffer) {%>
+                <span class="save-price font-md color3 ml-15"
+                  ><%-product.discountPercentage %>% Off</span
+                >
+                <% } else {%>
+                <span class="save-price font-md color3 ml-15"
+                  ><%-product.productOffer %>% Off</span
+                >
+                <% } %> <% } %>
               </span>
             </div>
-          
-            <span class="old-price font-md ">₹<s><%-product.originalPrice %></s></span>
+
+            <span class="old-price font-md"
+              >₹<s><%-product.originalPrice %></s></span
+            >
             <div class="product-price">
-            
               <% if (product.discountPercentage>product.productOffer) {%>
-            
+
               <span>₹<%-product.price %></span>
-               <%} else {%>
-           
-              <span>₹<%-parseInt(product.originalPrice-(product.originalPrice)*(product.productOffer)/100) %></span>
-              <% } %> 
-              <div>
-              
-              </div>
+              <%} else {%>
+
+              <span
+                >₹<%-parseInt(product.originalPrice-(product.originalPrice)*(product.productOffer)/100)
+                %></span
+              >
+              <% } %>
+              <div></div>
             </div>
             <div class="product-action-1 show">
               <a

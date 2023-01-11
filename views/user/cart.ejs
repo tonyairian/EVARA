@@ -49,7 +49,8 @@
 
                   <td class="product-des">
                     <h5 class="product-name">
-                      <a href="/profile-product-view?id=<%-products.Product._id%>"
+                      <a
+                        href="/profile-product-view?id=<%-products.Product._id%>"
                         ><%- products.Product.name %></a
                       >
                     </h5>
@@ -86,8 +87,8 @@
                     <!-- QUANTITY -->
                   </td>
                   <td class="text-right" data-title="Cart">
-                    <span id="subtotal"
-                      > ₹<%=products.quantity*products.Product.price %>
+                    <span id="subtotal">
+                      ₹<%=products.quantity*products.Product.price %>
                     </span>
                   </td>
                   <td class="action" data-title="Remove">
@@ -118,8 +119,8 @@
                   <td class="cart_total_label">Total</td>
                   <td class="cart_total_amount">
                     <strong
-                      ><span class="font-xl fw-900 text-brand" id="total"
-                        > ₹<%= totalAmount%>
+                      ><span class="font-xl fw-900 text-brand" id="total">
+                        ₹<%= totalAmount%>
                       </span></strong
                     >
                   </td>
@@ -144,9 +145,6 @@
 </main>
 
 <script>
-
-
-
   function changeQuantity(cartId, proId, count, input) {
     let quantity = parseInt(document.getElementById("proId").innerHTML);
     const price = parseInt(document.getElementById("price").innerHTML);
@@ -166,12 +164,12 @@
         }
       },
       success: (response) => {
+        console.log(response);
         if (response.removeProduct) {
           alert("product removed from cart");
           location.reload();
         } else {
           let qty = input.value;
-
           if (count > 0) {
             qty = parseInt(qty) + 1;
             input.value = qty;
@@ -182,14 +180,11 @@
             qty = parseInt(qty) - 1;
             input.value = qty;
           }
-          console.log();
 
-          document.getElementById("total").innerHTML = response.total;
-          // document.getElementById(proId).innerHTML = quantity + count;
+          document.getElementById("total").innerHTML = "₹" + response.total;
           input.parentElement.parentElement.parentElement.querySelector(
             "#subtotal"
-          ).innerText = input.value * price;
-          console.log(quantity, price);
+          ).innerText = "₹" + response.productPrice.price * qty;
         }
       },
     });
