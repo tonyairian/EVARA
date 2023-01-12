@@ -4,7 +4,6 @@ require("dotenv").config();
 // const db = mongoose.connect("mongodb://localhost:27017/Ecommerce");
 const db = mongoose.connect(process.env.DATABASE);
 const { ObjectId } = require("mongodb");
-
 db.then(() => {
   console.log("connected");
 }).catch((err) => {
@@ -34,13 +33,13 @@ const productSchema = new mongoose.Schema({
   category: String,
   description: String,
   price: Number,
-  offerPrice:Number,
-  discountPercentage:Number,
-  categoryDiscount:Number,
-  offerPrice:Number,
-  originalPrice:Number,
-  categoryId:mongoose.Types.ObjectId,
-  productOffer:Number
+  offerPrice: Number,
+  discountPercentage: Number,
+  categoryDiscount: Number,
+  offerPrice: Number,
+  originalPrice: Number,
+  categoryId: mongoose.Types.ObjectId,
+  productOffer: Number,
 });
 
 const adminSchema = new mongoose.Schema({
@@ -51,9 +50,9 @@ const adminSchema = new mongoose.Schema({
 const categorySchema = new mongoose.Schema({
   categoryName: String,
   categoryDescription: String,
-  offer:Number,
-  ExpiryDate:String,
-  offerApply:Boolean
+  offer: Number,
+  ExpiryDate: String,
+  offerApply: Boolean,
 });
 
 const cartSchema = new mongoose.Schema({
@@ -73,9 +72,9 @@ const cartSchema = new mongoose.Schema({
 
 const orderSchema = new mongoose.Schema({
   date: Date,
-  orderDate:String,
-  orderMonth:String,
-  orderYear:String,
+  orderDate: String,
+  orderMonth: String,
+  orderYear: String,
   user: mongoose.Types.ObjectId,
   paymentMethod: String,
   status: String,
@@ -131,9 +130,8 @@ const couponSchema = new mongoose.Schema({
 });
 const bannerSchema = new mongoose.Schema({
   name: String,
-  description:String,
+  description: String,
 });
-
 
 module.exports = {
   product: mongoose.model("Product", productSchema),
@@ -144,5 +142,5 @@ module.exports = {
   order: mongoose.model("order", orderSchema),
   wishlist: mongoose.model("wishlist", wishlistSchema),
   coupon: mongoose.model("coupon", couponSchema),
-  banner: mongoose.model("banner",bannerSchema),
+  banner: mongoose.model("banner", bannerSchema),
 };
