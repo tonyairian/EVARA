@@ -204,7 +204,7 @@
             <div class="text-center">
               <button
                 type="button"
-               onclick="placeOrder()"
+                onclick="placeOrder()"
                 class="btn btn-fill-out btn-block hover-up"
               >
                 PLACE ORDER
@@ -337,34 +337,30 @@
 </main>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
+  // $("#checkout-form").submit((e) => {
+  //     e.preventDefault();
+  //     $.ajax({
+  //       url: "/place-order",
+  //       method: "post",
+  //       data: $("#checkout-form").serialize(),
+  //       success: (response) => {
+  //         console.log(response);
+  //         if (response.codSuccess) {
+  //           window.location.href = "/placed";
+  //         }
+  //         else if (response.payPal) {
+  //           for (let i = 0; i < response.links.length; i++) {
+  //             if (response.links[i].rel === "approval_url") {
+  //               location.href = response.links[i].href;
+  //             }
+  //           }
+  //         } else {
+  //           razorpay(response);
+  //         }
+  //       }
 
-// $("#checkout-form").submit((e) => {
-//     e.preventDefault();
-//     $.ajax({
-//       url: "/place-order",
-//       method: "post",
-//       data: $("#checkout-form").serialize(),
-//       success: (response) => {
-//         console.log(response);
-//         if (response.codSuccess) {
-//           window.location.href = "/placed";
-//         } 
-//         else if (response.payPal) {
-//           for (let i = 0; i < response.links.length; i++) {
-//             if (response.links[i].rel === "approval_url") {
-//               location.href = response.links[i].href;
-//             }
-//           }
-//         } else {
-//           razorpay(response);
-//         }
-//       }
-
-//     });
-//   });
-
-
-
+  //     });
+  //   });
 
   function placeOrder() {
     const name = document.getElementById("name").value;
@@ -391,7 +387,7 @@
         email: email,
         paymentMethod: paymentMethod,
       },
-    
+
       success: (response) => {
         if (response.codSuccess) {
           window.location.href = "/placed";
@@ -424,7 +420,7 @@
       modal: {
         ondismiss: function () {
           window.location.replace(
-            "https://www.evara.cf/payment-failed?id=" + data.receipt
+            "http://evara.cf/payment-failed?id=" + data.receipt
           );
           console.log("Checkout form closed");
         },
@@ -448,7 +444,7 @@
       console.log(data.receipt);
       console.log("-----------");
       window.location.href =
-        "https://www.evara.cf/payment-failed?id=" + data.receipt;
+        "http://evara.cf/payment-failed?id=" + data.receipt;
     });
 
     rzp1.open();
