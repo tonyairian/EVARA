@@ -374,6 +374,19 @@
     const paymentMethod = document.querySelector(
       'input[id="cod"]:checked'
     ).value;
+    if (
+      name == "" ||
+      address == "" ||
+      city == "" ||
+      state == "" ||
+      pincode == "" ||
+      phone == "" ||
+      email == "" ||
+      cod == ""
+    ) {
+      alert("select address");
+      return false;
+    }
     $.ajax({
       url: "/place-order",
       method: "post",
