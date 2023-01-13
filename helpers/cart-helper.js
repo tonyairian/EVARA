@@ -243,10 +243,22 @@ const placeOrder = (userDetails, products, total, user, userId) => {
       total: total,
       deliveryDetails: [Details],
       products: products,
-      couponApplied: cartProducts.couponApplied,
-      couponDiscount: cartProducts.couponDiscount,
-      couponDiscountPercentage: cartProducts.couponDiscountPercentage,
+      coupon: userDetails.couponName,
     };
+
+    if (userDetails.couponName) {
+      let USERID = {
+        userId: userId,
+      };
+      await db.coupon.updateOne(
+        { coupanId: userDetails.couponName },
+        {
+          $push: {
+            userData: [USERID],
+          },
+        }
+      );
+    }
 
     db.order(orderObj)
       .save()
@@ -382,98 +394,6 @@ const convertRate = (totalinr) => {
   });
 };
 
-const applyCoupon = async (details, userId, date, totalAmount) => {
-  let response = {};
-
-  //getting coupon data
-  let coupon = await db.coupon.findOne({ couponCode: details.coupon });
-  if (coupon) {
-    const [currentDate, currentMonth, currentYear] = new Date()
-      .toLocaleDateString()
-      .split("/");
-    const dateNow = currentYear + "-" + currentMonth + "-" + currentDate;
-    // console.log(dateNow);
-
-    //check if coupon expired
-    if (dateNow < coupon.expiryDate) {
-      let couponUsed = await db.coupon.findOne({
-        couponCode: details.coupon,
-        userData: userId,
-      });
-
-      if (!couponUsed) {
-        //calculating final price
-        couponDiscount = coupon.couponDiscount;
-
-        response.discountedAmount = Math.round(
-          (totalAmount * couponDiscount) / 100
-        );
-
-        //check if discount exeeds max coupon discount
-        if (response.discountedAmount > coupon.couponMaxDiscount) {
-          response.discountedAmount = coupon.couponMaxDiscount;
-          response.maxDiscount = true;
-        }
-
-        // response.isActive = true;
-        // response.isUsed = false;
-
-        //updating cart
-
-        await db.cart.updateOne(
-          { user: ObjectId(userId) },
-          {
-            $set: {
-              couponApplied: details.coupon,
-              couponIsActive: true,
-              couponIsUsed: false,
-              couponDiscount: response.discountedAmount,
-              couponDiscountPercentage: coupon.couponDiscount,
-            },
-          }
-        );
-        response.isUsed = false;
-      } else {
-        response.isUsed = true;
-
-        //updating cart
-        await db.cart.updateOne(
-          { user: userId },
-          {
-            $set: {
-              couponApplied: "none",
-              couponIsActive: true,
-              couponIsUsed: true,
-              couponDiscount: 0,
-              couponDiscountPercentage: 0,
-            },
-          }
-        );
-      }
-    } else {
-      response.isActive = false;
-
-      //updating cart
-      await db.cart.updateOne(
-        { user: userId },
-        {
-          $set: {
-            couponApplied: details.coupon,
-            couponIsActive: false,
-            couponIsUsed: false,
-            couponDiscount: 0,
-            couponDiscountPercentage: coupon.couponDiscount,
-          },
-        }
-      );
-    }
-  } else {
-    console.log("invalid coupon");
-    response.invalidCoupon = true;
-  }
-  // console.log(response);
-  return response;
-};
 
 const deleteCartProducts = async (userId) => {
   let cartCoupon = await db.cart.findOne({ user: userId });
@@ -526,6 +446,94 @@ const getProductPrice = async (productId) => {
   });
 };
 
+const applyCoupon = (details, userId, date, totalAmount) => {
+  return new Promise(async (resolve, reject) => {
+    let response = {};
+    let coupon = await db.coupon.findOne({ coupanId: details.coupon });
+    if (coupon) {
+      const expDate = new Date(coupon.expiryDate);
+      response.couponData = coupon;
+      let userFound = await db.coupon.findOne({
+        coupanId: details.coupon,
+        userData: { $elemMatch: { userId: userId } },
+      });
+      // console.log("0000000000");
+      // console.log(userFound);
+      // console.log("0000000000");
+      if (userFound) {
+        response.used = "Coupon Already Applied";
+        resolve(response);
+      } else {
+        if (date <= expDate) {
+          response.dateValid = true;
+          resolve(response);
+          let total = totalAmount;
+          if (total >= coupon.price) {
+            response.verifyMinAmount = true;
+            resolve(response);
+
+            if (total <= coupon.max) {
+              response.verifyMaxAmount = true;
+              resolve(response);
+            } else {
+              response.maxAmountMsg =
+                "Your Maximum Purchase should be " + coupon.max;
+              response.maxAmount = true;
+              resolve(response);
+            }
+          } else {
+            response.minAmountMsg =
+              "Your Minimum purchase should be " + coupon.price;
+            response.minAmount = true;
+            resolve(response);
+          }
+        } else {
+          response.invalidDateMsg = "coupon Expired";
+          response.invalidDate = true;
+          response.Coupenused = false;
+          resolve(response);
+        }
+      }
+    } else {
+      response.invalidCoupon = true;
+      response.invalidCouponMsg = "Invalid coupon";
+      resolve(response);
+    }
+
+    if (
+      response.dateValid &&
+      response.verifyMaxAmount &&
+      response.verifyMinAmount
+    ) {
+      response.verify = true;
+      db.cart
+        .updateOne(
+          { user: ObjectId(userId) },
+          {
+            $set: {
+              coupon: ObjectId(coupon._id),
+            },
+          }
+        )
+        .then((response) => {});
+      resolve(response);
+    }
+  });
+};
+
+const couponVerify = (user) => {
+  return new Promise(async (resolve, reject) => {
+    let userCart = await db.cart.findOne({ user: user });
+    if (userCart?.coupon) {
+      let couponData = await db.coupon.findOne({
+        _id: ObjectId(userCart.coupon),
+      });
+      resolve(couponData);
+    }
+    resolve(userCart);
+  });
+};
+
 module.exports = {
   addToCart,
   getCartProducts,
@@ -540,8 +548,9 @@ module.exports = {
   getProducts,
   getWishlistCount,
   convertRate,
-  applyCoupon,
   deleteCartProducts,
   userCart,
   getProductPrice,
+  applyCoupon,
+  couponVerify,
 };

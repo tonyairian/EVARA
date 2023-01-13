@@ -242,21 +242,28 @@
                         <input
                           type="text"
                           placeholder="Enter Coupon Code..."
-                          id="coupon-code"
+                          id="couponName"
                           style="text-transform: uppercase"
                         />
                       </div>
                       <div class="form-group">
-                        <p id="invalid" style="color: red"></p>
+                        <p id="successCoupon" style="color: #14de4d;"></p>
+                        <p id="errorCoupon" style="color: red;"></p>
 
                         <span></span>
+                    
+
                         <button
-                          class="btn btn-md"
-                          type="button"
-                          onclick="applyCoupon('<%=totalAmount %>')"
-                        >
-                          Apply Coupon
-                        </button>
+                        class="btn btn-md"
+                        name="couponName"
+                        id="couponName"
+                        type="button"
+                        onclick="applyCoupan(event)"
+                      >
+                        Apply Coupon
+                      </button>
+
+                       
                       </div>
                     </form>
                   </div>
@@ -299,7 +306,7 @@
                   <%j++ }); %>
                   <tr>
                     <th>SubTotal</th>
-                    <td class="product-subtotal" colspan="3">
+                    <td class="product-subtotal" colspan="3" >
                       ₹<%=totalAmount %>
                     </td>
                   </tr>
@@ -310,7 +317,7 @@
                   <tr>
                     <th>Total</th>
                     <td colspan="3" class="product-subtotal">
-                      <% if (afterCouponOffer==0) {%>
+                      <!-- <% if (afterCouponOffer==0) {%>
                       <span class="font-xl text-brand fw-900"
                         >₹<%=totalAmount %>
                       </span>
@@ -318,7 +325,16 @@
                       <span class="font-xl text-brand fw-900"
                         >₹ <%=parseInt(afterCouponOffer) %>
                       </span>
-                      <% } %>
+                      <% } %> -->
+
+
+
+                      <span class="font-xl text-brand fw-900"
+                      id="totalAmount"
+                      >₹<%=totalAmount %>
+                    </span>
+
+                    
                     </td>
                   </tr>
                 </tbody>
@@ -371,6 +387,7 @@
     const phone = document.getElementById("phone").value;
     const email = document.getElementById("email").value;
     const cod = document.getElementById("cod").value;
+    const couponName =document.getElementById('couponName').value
     const paymentMethod = document.querySelector(
       'input[id="cod"]:checked'
     ).value;
@@ -399,6 +416,7 @@
         phone: phone,
         email: email,
         paymentMethod: paymentMethod,
+        couponName:couponName
       },
 
       success: (response) => {
@@ -491,35 +509,92 @@
     $("#phone").val(phone);
     $("#email").val(email);
   }
-  function applyCoupon(totalAmount) {
-    const coupon = document.getElementById("coupon-code").value;
-    console.log(coupon);
+  // function applyCoupon(totalAmount) {
+  //   const coupon = document.getElementById("coupon-code").value;
+  //   console.log(coupon);
+  //   $.ajax({
+  //     url: "/apply-coupon",
+  //     method: "post",
+  //     data: {
+  //       totalAmount,
+  //       coupon,
+  //     },
+  //     success: (response) => {
+  //       if (response.invalidCoupon) {
+  //         const invalidEl = document.getElementById("invalid");
+  //         invalidEl.innerHTML = "Invalid Coupon";
+  //         invalidEl.style.color = "red";
+  //       }
+  //       if (response.isUsed) {
+  //         const invalidEl = document.getElementById("invalid");
+  //         invalidEl.innerHTML = "Coupon Already Used";
+  //         invalidEl.style.color = "grey";
+  //       }
+  //       if (response.isUsed == false) {
+  //         const invalidEl = document.getElementById("invalid");
+  //         invalidEl.innerHTML = "Coupon Applied";
+  //         invalidEl.style.color = "green";
+  //       }
+  //       if (response.noCoupon) {
+  //         const invalidEl = document.getElementById("invalid");
+  //         invalidEl.innerHTML = "please enter a coupon code";
+  //         invalidEl.style.color = "blue";
+  //       }
+
+  //       noCoupon: true;
+  //     },
+  //   });
+  //   console.log(totalAmount);
+  // }
+
+
+  function applyCoupan(event) {
+    let coupon = document.getElementById("couponName").value;
+    let amountDue = document.getElementById("totalAmount").innerText;
+    console.log("amount", amountDue, coupon);
     $.ajax({
-      url: "/apply-coupon",
+      url: "/apply-coupan",
       method: "post",
       data: {
-        totalAmount,
         coupon,
+        amountDue,
       },
       success: (response) => {
-        if (response.invalidCoupon) {
-          const invalidEl = document.getElementById("invalid");
-          invalidEl.innerHTML = "Invalid Coupon";
-          invalidEl.style.color = "red";
+        console.log(response);
+        if (response.verify) {
+          console.log("Valid", response.discountAmount, response.totalAmount);
+          var newAmount = response.totalAmount - response.discountAmount;
+          document.getElementById('successCoupon').innerText="Coupan Applied"
+          document.getElementById("totalAmount").innerHTML = newAmount;
         }
-        if (response.isUsed) {
-          const invalidEl = document.getElementById("invalid");
-          invalidEl.innerHTML = "Coupon Already Used";
-          invalidEl.style.color = "grey";
-        }
-        if (response.isUsed == false) {
-          const invalidEl = document.getElementById("invalid");
-          invalidEl.innerHTML = "Coupon Applied";
-          invalidEl.style.color = "green";
+        else {
+          console.log("Something went wrong")
+          let k = response.used
+          console.log(k)
+          if (response.used) {
+           console.log(response.used,'coupon used')
+            document.getElementById('errorCoupon').innerText = 'Coupon already Applied'
+          }
+          else if (response.minAmount) {
+            document.getElementById('errorCoupon').innerText = response.minAmountMsg;
+          }
+          else if (response.maxAmount) {
+            document.getElementById('errorCoupon').innerText = response.maxAmountMsg
+          }
+          else if (response.invalidDate) {
+            document.getElementById('errorCoupon').innerText = response.invalidDateMsg
+          }
+          else if (response.invalidCoupon) {
+            document.getElementById('errorCoupon').innerText = response.invalidCouponMsg
+          }
+          else if (response.noCoupon) {
+            document.getElementById('errorCoupon').innerText = 'Invalid Coupon Details'
+          }
         }
       },
     });
-    console.log(totalAmount);
   }
+
+
 </script>
 <%- include('../partials/user-footer') %>

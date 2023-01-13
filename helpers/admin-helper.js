@@ -182,50 +182,7 @@ const totalCategories = () => {
   return db.category.count();
 };
 
-const createNewCoupon = async (couponData) => {
-  couponData.date = new Date().toDateString();
-  couponData.status = "ACTIVE";
-  try {
-    return await new Promise(async (resolve, reject) => {
-      await db
-        .coupon(couponData)
-        .save()
-        .then((response) => {
-          if (response) {
-            resolve(response);
-          } else {
-            reject();
-          }
-        });
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
-const getCoupons = async () => await db.coupon.find().sort({ expiryDate: -1 });
-const editCoupon = async (couponId) =>
-  await db.coupon.findOne({ _id: couponId });
 
-const postEditCoupon = async (couponDetails) => {
-  const couponId = couponDetails.id;
-  return await db.coupon.updateOne(
-    { _id: couponId },
-    {
-      $set: {
-        couponCode: couponDetails.couponCode,
-        couponDiscount: couponDetails.couponDiscount,
-        expiryDate: couponDetails.expiryDate,
-        couponMaxDiscount: couponDetails.couponMaxDiscount,
-        couponMinCartValue: couponDetails.couponMinCartValue,
-      },
-    }
-  );
-};
-const deleteCoupon = async (couponId) => {
-  await db.coupon.deleteOne({ _id: couponId });
-};
-
-// ----------------------------------------------------------
 
 const dailyRevenue = () => {
   return new Promise(async (resolve, reject) => {
@@ -694,6 +651,33 @@ const deliveredRevenue=(req,res)=>{
       });
   });
 }
+
+///irfan coupon
+
+const addCoupan = (coupanDetails) => {
+  return new Promise((resolve, reject) => {
+    db.coupon(coupanDetails)
+      .save()
+      .then((response) => {
+        resolve(response);
+      });
+  });
+};
+
+const getCoupan = () => {
+  return new Promise(async (resolve, reject) => {
+    await db.coupon.find().then((response) => {
+      resolve(response);
+    });
+  });
+};
+
+
+const deleteCoupon = async (couponId) => {
+  await db.coupon.deleteOne({ _id: couponId });
+};
+
+
 module.exports = {
   adminLogin,
   getUsers,
@@ -706,10 +690,6 @@ module.exports = {
   totalOrders,
   totalProducts,
   totalCategories,
-  createNewCoupon,
-  getCoupons,
-  editCoupon,
-  postEditCoupon,
   deleteCoupon,
   dailyRevenue,
   paymentMethod,
@@ -726,5 +706,8 @@ module.exports = {
   getProductForOffer,
   addOfferToProduct,
   removeCategoryOffer,
-  deliveredRevenue
+  deliveredRevenue,
+  addCoupan,
+  getCoupan
+
 };

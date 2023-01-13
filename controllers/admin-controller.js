@@ -139,45 +139,7 @@ const changeStatus = async (req, res) => {
   });
 };
 
-const getCoupons = async (req, res) => {
-  const coupons = await adminHelper.getCoupons();
-  // console.log(coupons);
-  res.render("admin/coupons", { coupons });
-};
 
-const addNewCoupon = (req, res) => {
-  res.render("admin/add-new-coupon");
-};
-const addNewCouponPost = (req, res) => {
-  adminHelper.createNewCoupon(req.body).then(() => {
-    res.redirect("/admin/coupons");
-  });
-};
-
-const editCoupon = async (req, res) => {
-  const couponId = req.query.id;
-  const couponData = await adminHelper.editCoupon(couponId);
-  res.render("admin/edit-coupon", { couponData });
-};
-const postEditCoupon = async (req, res) => {
-  const couponData = await adminHelper.postEditCoupon(req.body);
-  console.log(couponData);
-  res.redirect("/admin/coupons");
-};
-
-const deleteCoupon = async (req, res) => {
-  const couponId = req.query.id;
-  await adminHelper
-    .deleteCoupon(couponId)
-    .then(() => {
-      res.redirect("/admin/coupons");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
-// -------------------------------------------------------------------
 const dailyRevenue = async (req, res) => {
   try {
     await adminHelper.dailyRevenue().then((response) => {
@@ -370,6 +332,53 @@ const removeCategoryOffer = (req, res) => {
     console.log(error);
   }
 };
+
+
+///irfan coupon
+const getCoupan = (req, res) => {
+  try {
+    adminHelper.getCoupan().then((coupan) => {
+      res.render("admin/coupan-list", { layout: "admin-layout", coupan });
+    });
+  } catch (error) {
+    console.log(error);
+    res.render("admin/error",{layout: "admin-layout"})
+  }
+};
+
+const coupanForm = (req, res) => {
+  try {
+    res.render("admin/coupan-form", { layout: "admin-layout" });
+  } catch (error) {
+    console.log(error);
+    res.render("admin/error",{layout: "admin-layout"})
+  }
+};
+
+const addCoupan = (req, res) => {
+  try {
+    adminHelper.addCoupan(req.body).then((response) => {
+      res.redirect("/admin/coupan");
+    });
+  } catch (error) {
+    console.log(error);
+    res.render("admin/error",{layout: "admin-layout"})
+  }
+};
+
+const deleteCoupon = async (req, res) => {
+  const couponId = req.query.id;
+  await adminHelper
+    .deleteCoupon(couponId)
+    .then(() => {
+      res.redirect("/admin/coupan");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+
 module.exports = {
   adminLandingPage,
   adminLogin,
@@ -383,11 +392,6 @@ module.exports = {
   singleOrder,
   changeStatus,
   addProduct,
-  getCoupons,
-  addNewCoupon,
-  addNewCouponPost,
-  editCoupon,
-  postEditCoupon,
   deleteCoupon,
   dailyRevenue,
   paymentMethod,
@@ -404,4 +408,8 @@ module.exports = {
   viewOffer,
   addCategoryOffer,
   removeCategoryOffer,
+  getCoupan,
+  coupanForm,
+  addCoupan
+
 };

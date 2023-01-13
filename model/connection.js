@@ -63,11 +63,7 @@ const cartSchema = new mongoose.Schema({
       quantity: Number,
     },
   ],
-  couponApplied: String,
-  couponIsActive: Boolean,
-  couponIsUsed: Boolean,
-  couponDiscount: Number,
-  couponDiscountPercentage: Number,
+  coupon: String,
 });
 
 const orderSchema = new mongoose.Schema({
@@ -99,9 +95,7 @@ const orderSchema = new mongoose.Schema({
       status: String,
     },
   ],
-  couponApplied: String,
-  couponDiscount: Number,
-  couponDiscountPercentage: Number,
+  coupon:String
 });
 
 const wishlistSchema = new mongoose.Schema({
@@ -114,20 +108,35 @@ const wishlistSchema = new mongoose.Schema({
   ],
 });
 
+// const couponSchema = new mongoose.Schema({
+//   couponCode: String,
+//   couponDiscount: Number,
+//   couponMaxDiscount: Number,
+//   couponMinCartValue: Number,
+//   date: String,
+//   expiryDate: String,
+//   status: String,
+//   userData: [
+//     // {
+//     //   userId: mongoose.Types.ObjectId,
+//     // },
+//   ],
+// });
+
 const couponSchema = new mongoose.Schema({
-  couponCode: String,
-  couponDiscount: Number,
-  couponMaxDiscount: Number,
-  couponMinCartValue: Number,
-  date: String,
+  coupanId: String,
+  coupanName: String,
+  max: Number,
+  price: Number,
   expiryDate: String,
-  status: String,
+  percentage: Number,
   userData: [
-    // {
-    //   userId: mongoose.Types.ObjectId,
-    // },
+    {
+      userId: mongoose.Types.ObjectId,
+    },
   ],
 });
+
 const bannerSchema = new mongoose.Schema({
   name: String,
   description: String,

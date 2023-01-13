@@ -213,7 +213,7 @@ const changeProductQuantity = async (req, res) => {
     .changeProductQuantity(cartId, productId, count, quantity)
     .then(async (response) => {
       response.total = await cartHelper.getTotalAmount(userId);
-      response.productPrice=await cartHelper.getProductPrice(productId)
+      response.productPrice = await cartHelper.getProductPrice(productId);
       res.json(response);
     });
 };
@@ -259,48 +259,85 @@ const getTotalAmount = async (req, res) => {
   });
 };
 
+
+
 const placeOrder = async (req, res) => {
   let user = req.session.user;
   let userId = req.session.user._id;
+  let products = await cartHelper.getCartProducts(userId);
   const userDetails = req.body;
   let cartCount = await cartHelper.getCartCount(userId);
-  let products = await cartHelper.getCartProducts(userId);
   let total = await cartHelper.getTotalAmount(userId);
-  cartHelper
-    .placeOrder(userDetails, products, total, user, userId)
-    .then((response) => {
-      let orderId = response._id;
-      if (req.body.paymentMethod == "COD") {
-        res.json({ codSuccess: true });
-        //
-      } else if (req.body.paymentMethod == "razorpay") {
-        cartHelper.generateRazorpay(userId, total).then((order) => {
-          res.json(order);
-        });
-      } else if (req.body.paymentMethod == "paypal") {
-        cartHelper.convertRate(total).then((data) => {
-          // converting inr to usd
-          convertedRate = Math.round(data);
+  let verifyCoupon = await cartHelper.couponVerify(userId);
+  if (verifyCoupon.coupanId == req.body.couponName) {
+    let discountAmount = (total * parseInt(verifyCoupon.percentage)) / 100;
+    let amount = Math.round(total - discountAmount);
+    cartHelper
+      .placeOrder(userDetails, products, amount, user, userId)
+      .then((response) => {
+        let orderId = response._id;
+        if (req.body.paymentMethod == "COD") {
+          res.json({ codSuccess: true });
+          //
+        } else if (req.body.paymentMethod == "razorpay") {
+          cartHelper.generateRazorpay(userId, amount).then((order) => {
+            res.json(order);
+          });
+        } else if (req.body.paymentMethod == "paypal") {
+          cartHelper.convertRate(amount).then((data) => {
+            // converting inr to usd
+            convertedRate = Math.round(data);
 
-          userHelper
-            .generatePayPal(orderId.toString(), convertedRate)
-            .then((response) => {
-              response.insertedId = orderId;
-              response.payPal = true;
-              console.log(response);
-              res.json(response);
-            });
-        });
-      } else {
-        console.log("something happened to error ");
-      }
-    });
+            userHelper
+              .generatePayPal(orderId.toString(), convertedRate)
+              .then((response) => {
+                response.insertedId = orderId;
+                response.payPal = true;
+                console.log(response);
+                res.json(response);
+              });
+          });
+        } else {
+          console.log("something happened to error ");
+        }
+      });
+  } else {
+    cartHelper
+      .placeOrder(userDetails, products, total, user, userId)
+      .then((response) => {
+        let orderId = response._id;
+        if (req.body.paymentMethod == "COD") {
+          res.json({ codSuccess: true });
+          //
+        } else if (req.body.paymentMethod == "razorpay") {
+          cartHelper.generateRazorpay(userId, total).then((order) => {
+            res.json(order);
+          });
+        } else if (req.body.paymentMethod == "paypal") {
+          cartHelper.convertRate(total).then((data) => {
+            // converting inr to usd
+            convertedRate = Math.round(data);
+
+            userHelper
+              .generatePayPal(orderId.toString(), convertedRate)
+              .then((response) => {
+                response.insertedId = orderId;
+                response.payPal = true;
+                console.log(response);
+                res.json(response);
+              });
+          });
+        } else {
+          console.log("something happened to error ");
+        }
+      });
+  }
 };
 
 const placed = async (req, res) => {
   let user = req.session.user;
   let userId = req.session.user._id;
-  let cartCount = await cartHelper.getCartCount(userId);
+  let cartCount = 0;
   let wishlistCount = await cartHelper.getWishlistCount(userId);
   let products = await cartHelper.getCartProducts(userId);
   let deleteCart = await cartHelper.deleteCartProducts(userId);
@@ -459,28 +496,7 @@ const returnProduct = async (req, res) => {
   });
 };
 
-const applyCoupon = async (req, res) => {
-  try {
-    const user = req.session.user._id;
-    const date = new Date();
-    const totalAmount = req.body.totalAmount;
-    const couponCode = req.body.coupon;
-    if (couponCode == "") {
-      res.json({ noCoupon: true, totalAmount });
-    } else {
-      let couponres = await cartHelper.applyCoupon(
-        req.body,
-        user,
-        date,
-        totalAmount
-      );
-      console.log(couponres);
-      res.json(couponres);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+
 const undefined = (req, res) => {
   res.redirect("/");
 };
@@ -523,6 +539,41 @@ const errorPage = (req, res) => {
   res.render("user/error");
 };
 
+const couponApply = async (req, res) => {
+  try {
+    let user = req.session.user._id;
+    const date = new Date();
+    let totalAmount = await cartHelper.getTotalAmount(req.session.user._id);
+    let coupanCode = req.body.coupon;
+   
+    if (coupanCode == "") {
+      res.json({ noCoupon: true, totalAmount });
+    } else {
+      let couponres = await cartHelper.applyCoupon(
+        req.body,
+        user,
+        date,
+        totalAmount
+      );
+      if (couponres.verify) {
+        let discountAmount =
+          (totalAmount * parseInt(couponres.couponData.percentage)) / 100;
+        let amount = totalAmount - discountAmount;
+        couponres.totalAmount = totalAmount;
+        couponres.discountAmount = Math.round(discountAmount);
+        couponres.amount = Math.round(amount);
+        res.json(couponres);
+      } else {
+        couponres.Total = totalAmount;
+        res.json(couponres);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.render("user/error");
+  }
+};
+
 module.exports = {
   userSignup,
   landingPage,
@@ -555,11 +606,11 @@ module.exports = {
   editAccountDetails,
   updateAccountDetails,
   returnProduct,
-  applyCoupon,
   viewCategoryProducts,
   undefined,
   searchResults,
   razorpayFailed,
   razorFailure,
   errorPage,
+  couponApply,
 };
